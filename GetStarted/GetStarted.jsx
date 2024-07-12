@@ -1,13 +1,13 @@
 import { View, Text, Image, StyleSheet, TouchableOpacity, Pressable, SafeAreaView} from 'react-native'
 import React from 'react'
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+
 import { StatusBar } from 'expo-status-bar';
 
 
 const getstarted = require('../assets/getstarted.jpeg');
 function GetStarted({ navigation }) {
   return (
-    <SafeAreaProvider>
+   <>
     <StatusBar style="auto" />
     <View style={styles.container}>
      <Text  style={styles.name}>Drift</Text>
@@ -22,11 +22,11 @@ function GetStarted({ navigation }) {
           <Text style={styles.buttonText}>Drift Rider</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Signup')}>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('SignupD')}>
           <Text style={styles.buttonText}>Drift Driver</Text>
       </TouchableOpacity>
     </View>
-    </SafeAreaProvider>
+   </>
   )
 }
 
@@ -44,21 +44,21 @@ const styles = StyleSheet.create({
     image: {
         width: 100,
         height: 100,
-        borderRadius: 50, 
+        borderRadius: 75, 
         marginBottom: 20
        
      },
     name : {
-        fontSize: 30,
+        fontSize: 35,
         margin: 20
     },
      description : {
-        fontSize: 18,
+        fontSize: 20,
         margin: 12
     },
      
    button: {
-        width: 200,
+        width: 290,
         padding: 5,
         backgroundColor: '#1e90ff',
         borderRadius: 6,
@@ -73,7 +73,8 @@ const styles = StyleSheet.create({
         textAlign: "center"
     },
     text: {
-      fontSize: 25,
-      margin: 5
+      fontSize: 35,
+      margin: 5,
+      marginTop:30
     }
   });

@@ -34,7 +34,7 @@ const EnterLocation = () => {
   };
 
   
- /*   const fetchNearestDistances = async () => {  
+ /*  const fetchNearestDistances = async () => {  
       try {
         const response =await fetch('http://localhost:3001/my');
         if (response.ok) {
@@ -48,9 +48,9 @@ const EnterLocation = () => {
         } catch (error) {
           console.error('Error fetching nearest distances:', error.message);
           Alert.alert('Error', 'Failed to fetch nearest distances');
-        }
-    }; */
-  
+        }  
+    }; 
+    */
     
 
   return (

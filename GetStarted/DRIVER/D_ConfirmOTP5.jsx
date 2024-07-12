@@ -7,7 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
-function ConfirmOTP5({route, navigation}){ 
+function D_ConfirmOTP5({route, navigation}){ 
     const [otp, setOtp] = useState(["", "", "", ""]); 
     const [timeOut, setTimeOut] = useState(false);
     const { contact,identity, firstName, lastName, dataId } = route.params;
@@ -49,7 +49,7 @@ function ConfirmOTP5({route, navigation}){
   
       // Send POST request to your backend
       try {
-        const response = await fetch('http://localhost:3001/otpresend2', {
+        const response = await fetch('http://localhost:3001/d_otpresend2', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -90,7 +90,7 @@ function ConfirmOTP5({route, navigation}){
         const combinedOtp = otp.join('');
         console.log('Combined OTP:', combinedOtp); 
   
-        const response = await fetch('http://localhost:3001/mmverifyotp4', {
+        const response = await fetch('http://localhost:3001/d_mmverifyotp4', {
           method: 'POST',
           headers: {  
             'Content-Type': 'application/json',
@@ -123,7 +123,8 @@ function ConfirmOTP5({route, navigation}){
         console.log('OTP verified') 
         AsyncStorage.setItem('key', "verified");
         AsyncStorage.setItem('id', contact)
-        navigation.navigate('HomeScreen', { identity:contact }); 
+        AsyncStorage.setItem('type', "driver");
+        navigation.navigate('DriverRequestD', { contact:contact }); 
       
       }  else if(data.error === 'Unexpected error'){
         console.log('Unexpected error') 
@@ -188,7 +189,7 @@ function ConfirmOTP5({route, navigation}){
   )
 }
 
-export default ConfirmOTP5
+export default D_ConfirmOTP5
 
 const styles = StyleSheet.create({
     container: {

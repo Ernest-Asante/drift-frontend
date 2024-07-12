@@ -1,10 +1,26 @@
 import { StyleSheet, Text, View, TextInput, TouchableOpacity ,Pressable} from 'react-native'
 import React, {useState, useEffect} from 'react'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function DriverRequest() {
+export default function D_DriverRequest() {
   const [data, setData] = useState('');
   const [acceptData, setAcceptData] = useState('');
   const [rejectData, setRejectData] = useState('');
+
+  const signOut = async () => {
+    try {
+      // Remove the 'token' key from AsyncStorage
+      await AsyncStorage.removeItem('key'); 
+      await AsyncStorage.removeItem('id');
+      await AsyncStorage.removeItem('type');
+
+      console.log('Success', 'You have been signed out.');
+      navigation.navigate('GetStarted') 
+    } catch (error) { 
+      console.error('Error signing out:', error);  
+    
+    }
+  };
 
     const fetchDrivers = async () => {
       try {
@@ -45,11 +61,18 @@ export default function DriverRequest() {
               'Content-Type': 'application/json',
             }, 
             body: JSON.stringify({
-              riderId:data.riderId,
-              driverId:data.driverId // Replace with actual user ID
+              userId:data.riderId,
+              driverId:data.driverId,
+                driverId: data.driverId,
+                time:" 4 minutes",
+                model: `${data.colour, data.name} `,
+                Plate: data.license,
+                tripId:0,
+                
+              // Replace with actual user ID
               
-            }), 
-          });
+            })
+          })
   
           if (!response.ok) { 
             throw new Error('Network response was not ok'); 
@@ -78,8 +101,8 @@ export default function DriverRequest() {
               'Content-Type': 'application/json',
             }, 
             body: JSON.stringify({
-              riderId:data.riderId,
-              driverId:data.driverId// Replace with actual user ID
+              userId:82,
+              driverId: 14 // Replace with actual user ID
               
             }), 
           }); 
@@ -119,6 +142,10 @@ export default function DriverRequest() {
   return (
 <>
 <View>
+
+       <TouchableOpacity style={styles.button} onPress={signOut}>
+          <Text style={styles.buttonText}>Signout</Text>
+        </TouchableOpacity> 
           <TouchableOpacity style={styles.button} onPress={fetchDrivers}>
           <Text style={styles.buttonText}>Continue</Text>
          </TouchableOpacity>

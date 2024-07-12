@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 
-const RideStatus = () => {
+const RideStatus = ({route}) => {
   const [rideAvailable, setRideAvailable] = useState(false);
   const [pollingTimer, setPollingTimer] = useState(null);
   const [timeElapsed, setTimeElapsed] = useState(0);
   const [loading, setLoading] = useState(true); // Initially set to true to show loading indicator
-  const [timeInterval, setTimeInterval] = useState(null); // Initially set to true to show loading indicator
+  const [timeInterval, setTimeInterval] = useState(null);
+  const { riderId } = route.params; // Initially set to true to show loading indicator
 
   useEffect(() => {
     const fetchData = async () => {
@@ -17,7 +18,7 @@ const RideStatus = () => {
               'Content-Type': 'application/json',
             }, 
             body: JSON.stringify({
-              userId:82,
+              userId:riderId,
              
               
             })

@@ -6,35 +6,38 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const PanicDetail2 = ({route,navigation}) => {
+const D_CarDetail = ({route,navigation}) => {
    
-    const [firstName, setFirstName] = useState('');
+    const [carName, setCarName] = useState('');
     const [getfirstName, setGetfirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [relation, setRelation] = useState('');
-    const [contact, setContact] = useState(''); 
+    const [carModel, setCarModel] = useState('');
+    const [registrationId, setRegistrationId] = useState('');
+    const [colour, setColour] = useState(''); 
+    const [license, setLicense] = useState(''); 
+    const [roadworthy, setRoadworthy] = useState(''); 
     const [loading, setLoading] = useState(true); 
-    const { contacts} = route.params;
+    const { identity} = route.params;
     
 
     useEffect(() => {
         const fetchFirstName = async () => {
           try {
-            const response = await fetch('http://localhost:3001/getfirstname', {
+            const response = await fetch('http://localhost:3001/d_getfirstname', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json', 
               },
-              body: JSON.stringify({ identity: contacts }),
+              body: JSON.stringify({ identity: identity }), 
             });
     
-            if (!response.ok) {
-              throw new Error('Failed to fetch first name');
+            if (!response.ok) { 
+              throw new Error('Failed to fetch first name'); 
             }
     
             const data = await response.json();
-            setGetfirstName(data.firstName); 
-          } catch (error) { 
+            setGetfirstName(data.firstName);
+            console.log(data.data)
+          } catch (error) {
             console.error('Error fetching first name:', error.message);
           }  finally {
             setLoading(false); // Set loading to false once data is fetched
@@ -42,7 +45,7 @@ const PanicDetail2 = ({route,navigation}) => {
         };
     
         fetchFirstName();
-      }, [contacts]);
+      }, [identity]);
 
  
     const handlePanicSubmit = async () => {
@@ -52,19 +55,19 @@ const PanicDetail2 = ({route,navigation}) => {
   
       // Send POST request to your backend
       try {
-        const response = await fetch('http://localhost:3001/addpanic', {
+        const response = await fetch('http://localhost:3001/d_addcardetails', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({identity:contacts,  contact: contact, firstName: firstName,lastName: lastName, relation: relation}),
+          body: JSON.stringify({ identity: identity, carName: carName, carModel: carModel, registrationId: registrationId, colour: colour, license: license, roadworthy: roadworthy}),
         });
    
         if (!response.ok) {
           throw new Error('Failed to add data'); 
         }
    
-        const data = await response.json();  
+        const data = await response.json();
         console.log('Data available:', data);
   
         // Navigate to next screen (ConfirmOTP or wherever needed)
@@ -72,9 +75,9 @@ const PanicDetail2 = ({route,navigation}) => {
           console.log('Panic added successfully:', data.message);
           // Navigate to next screen (ConfirmOTP or wherever needed)
           AsyncStorage.setItem('key', "verified");
-          AsyncStorage.setItem('id', contacts)
-          AsyncStorage.setItem('type', "rider")
-          navigation.navigate('HomeScreen', { identity:contacts});
+          AsyncStorage.setItem('id', identity)
+          AsyncStorage.setItem('type', "driver")
+          navigation.navigate('DriverRequestD', { identity:identity});
         } else { 
           console.error('Failed to add data:', data.message);
           // Show an alert or other notification to the user
@@ -88,7 +91,7 @@ const PanicDetail2 = ({route,navigation}) => {
       }
     };
 
-  
+
   if (loading) {
     return (
       <SafeAreaProvider>
@@ -110,56 +113,59 @@ const PanicDetail2 = ({route,navigation}) => {
         </View>
 
         <View>
-            <Text style={styles.textone}>{getfirstName}, give use someone we can reach out to when you are in danger</Text>
+            <Text style={styles.textone}>{getfirstName}, you are almost there. Fill in your car details</Text>
         </View>
      
-        <Text style={styles.textlabel}>First name: </Text>
+        <Text style={styles.textlabel}>Car name: </Text>
      <View>
       <TextInput
         style={styles.input}
-        placeholder="Enter your first name"
+        placeholder="Enter car name"
         keyboardType="text" 
-        value={firstName}
-        onChangeText={(value) => setFirstName(value)}  // Ensures the numeric keypad with phone number symbols
+        value={carName}
+        onChangeText={(value) => setCarName(value)}  // Ensures the numeric keypad with phone number symbols
       />
       </View>
 
       
-      <Text style={styles.textlabel}>Last name: </Text>
+      <Text style={styles.textlabel}>Car Model: </Text>
      <View>
       <TextInput
         style={styles.input}
-        placeholder="Enter your last name"
+        placeholder="Enter the car model"
         keyboardType="text" 
-        value={lastName}
-        onChangeText={(value) => setLastName(value)}  // Ensures the numeric keypad with phone number symbols
+        value={carModel}
+        onChangeText={(value) => setCarModel(value)}  // Ensures the numeric keypad with phone number symbols
       />
       </View>
 
        
-      <Text style={styles.textlabel}>How do you relate: </Text>
+      <Text style={styles.textlabel}>Registration number: </Text>
      <View>
       <TextInput
         style={styles.input}
-        placeholder="Eg. brother/father/company/friend"
+        placeholder="Enter car registration number"
         keyboardType="text" 
-        value={relation}
-        onChangeText={(value) => setRelation(value)}  // Ensures the numeric keypad with phone number symbols
+        value={registrationId}
+        onChangeText={(value) => setRegistrationId(value)}  // Ensures the numeric keypad with phone number symbols
       />
       </View>
 
      
          
-      <Text style={styles.textlabel}>Phone numberr: </Text>
+      <Text style={styles.textlabel}>Color of car: </Text>
       <View>
        <TextInput
          style={styles.input}
-         placeholder="Enter your phone number"
-         keyboardType="number" 
-         value={contact}
-         onChangeText={(value) => setContact(value)} // Ensures the numeric keypad with phone number symbols
+         placeholder="Enter the color(s) of the car"
+         keyboardType="text" 
+         value={colour}
+         onChangeText={(value) => setColour(value)} // Ensures the numeric keypad with phone number symbols
        />
        </View>
+
+       <Text style={styles.textlabel}>SPACE FOR DRIVER LICENSE DOCUMENT: </Text>
+       <Text style={styles.textlabel}>SPACE FOR ROAD WORTHY DOCUMENT: </Text>
       
 
       
@@ -184,7 +190,7 @@ const PanicDetail2 = ({route,navigation}) => {
   )
 }
 
-export default PanicDetail2
+export default D_CarDetail
 
 const styles = StyleSheet.create({
     container: {

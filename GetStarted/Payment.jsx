@@ -41,6 +41,7 @@ function Payment({route,navigation}){
       // Remove the 'token' key from AsyncStorage
       await AsyncStorage.removeItem('key');
       await AsyncStorage.removeItem('id');
+      await AsyncStorage.removeItem('type');
 
       console.log('Success', 'You have been signed out.');
       navigation.navigate('GetStarted')

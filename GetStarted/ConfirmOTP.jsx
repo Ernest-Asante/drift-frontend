@@ -126,9 +126,10 @@ function ConfirmOTP({route, navigation}){
           navigation.navigate('PanicDetail', { identity });
         } else{
           console.log('user is fully inclusive') 
-          AsyncStorage.setItem('key', "verified");
-          AsyncStorage.setItem('id', identity)
-          navigation.navigate('Payment', { identity:identity });
+          AsyncStorage.setItem('key', "verified"); 
+          AsyncStorage.setItem('id', identity);
+          AsyncStorage.setItem('type', "rider")
+          navigation.navigate('HomeScreen', { identity:identity });
         }
        
       }

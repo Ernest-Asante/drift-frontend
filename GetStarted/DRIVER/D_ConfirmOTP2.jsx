@@ -7,11 +7,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
-function ConfirmOTP5({route, navigation}){ 
+function D_ConfirmOTP2({route, navigation}){ 
     const [otp, setOtp] = useState(["", "", "", ""]); 
     const [timeOut, setTimeOut] = useState(false);
-    const { contact,identity, firstName, lastName, dataId } = route.params;
-    console.log(dataId)
+    const { contact, identity, firstName, lastName, ghanaCard, address, photo } = route.params;
+    console.log(firstName)
 
     const [timeLeft, setTimeLeft] = useState(30); // 60 seconds countdown
   
@@ -49,12 +49,12 @@ function ConfirmOTP5({route, navigation}){
   
       // Send POST request to your backend
       try {
-        const response = await fetch('http://localhost:3001/otpresend2', {
+        const response = await fetch('http://localhost:3001/d_otpresend2', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ identity: identity, contact: contact, dataId: dataId}),
+          body: JSON.stringify({ identity: identity, contact: contact}),
         });
    
         if (!response.ok) {
@@ -62,11 +62,11 @@ function ConfirmOTP5({route, navigation}){
         }
    
         const data = await response.json();
-        console.log('otp added successfully:', data);
+        console.log('Email added successfully:', data);
   
         // Navigate to next screen (ConfirmOTP or wherever needed)
         if (data.message === 'OTP sent successfully') {
-          console.log('otp added successfully:', data.message);
+          console.log('Email added successfully:', data.message);
           setTimeOut(false)
           setTimeLeft(30)
           // Navigate to next screen (ConfirmOTP or wherever needed)
@@ -90,12 +90,12 @@ function ConfirmOTP5({route, navigation}){
         const combinedOtp = otp.join('');
         console.log('Combined OTP:', combinedOtp); 
   
-        const response = await fetch('http://localhost:3001/mmverifyotp4', {
+        const response = await fetch('http://localhost:3001/d_mmverifyotp2', {
           method: 'POST',
           headers: {  
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ identity: identity, otp: combinedOtp, contact: contact, firstName: firstName, lastName: lastName, dataId: dataId}),
+          body: JSON.stringify({ identity: identity, otp: combinedOtp, contact: contact, firstName: firstName, lastName: lastName, ghanacard: ghanaCard, address: address, photo: photo}),
         }); 
   
      /*   if (!response.ok) {
@@ -103,7 +103,7 @@ function ConfirmOTP5({route, navigation}){
         } */
   
         const data = await response.json();
-        console.log('OTP verification successful:', data); 
+        console.log('OTP verification successful:', data);
 
           // Navigate to next screen (ConfirmOTP or wherever needed)
       if (data.error === 'error fetching data') {
@@ -116,18 +116,19 @@ function ConfirmOTP5({route, navigation}){
       } else if(data.message === 'OTP has expired'){  
         console.error('OTP has expired:', data.message);
         // Show an alert or other notification to the user
-      } else if(data.message === 'Error deleting data'){  
-        console.error('Error deleting data:', data.message);
-        // Show an alert or other notification to the user
-      }    else if(data.message === 'OTP verified'){
-        console.log('OTP verified') 
-        AsyncStorage.setItem('key', "verified");
-        AsyncStorage.setItem('id', contact)
-        navigation.navigate('HomeScreen', { identity:contact }); 
-      
+      }  else if(data.message === 'Invalid OTP'){
+        console.log('Invalid OTP') 
+      }  else if(data.message === 'Error inserting data'){
+        console.log('Error inserting data') 
+      }  else if(data.message === 'Data inserted successfully'){ 
+        console.log('Data inserted successfully') 
+        navigation.navigate('CarDetail', { identity });
+      }  else if(data.message === 'Unexpected error during insert'){
+        console.log('Unexpected error during insert') 
       }  else if(data.error === 'Unexpected error'){
         console.log('Unexpected error') 
-      }
+      } 
+  
         // Navigate to the next screen (e.g., CreateProfile) upon successful OTP verification
       
       } catch (error) {
@@ -188,7 +189,7 @@ function ConfirmOTP5({route, navigation}){
   )
 }
 
-export default ConfirmOTP5
+export default D_ConfirmOTP2
 
 const styles = StyleSheet.create({
     container: {

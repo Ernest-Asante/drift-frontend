@@ -1,14 +1,15 @@
 import { StyleSheet, Text, View, TextInput, TouchableOpacity ,FlatList, Pressable} from 'react-native'
 import React, {useState, useEffect} from 'react'
 
-export default function OrderRide({navigation}) {
+export default function OrderRide({navigation, route}) {
   const [pickupLocation, setPickupLocation] = useState('');
   const [dropOff, setDropoff] = useState('');
   const [drivers, setDrivers] = useState([]);
   const [highestRatedDriver, setHighestRatedDriver] = useState(null);
-
+ const { riderId } = route.params;
 
     const fetchDrivers = async () => {
+     
       try {
         const response = await fetch('http://localhost:3001/my', {
           method: 'POST',
@@ -16,7 +17,7 @@ export default function OrderRide({navigation}) {
             'Content-Type': 'application/json',
           }, 
           body: JSON.stringify({
-            userId:82, // Replace with actual user ID
+            userId:riderId, // Replace with actual user ID
 
           }), 
         });
@@ -49,10 +50,10 @@ export default function OrderRide({navigation}) {
         // setDrivers(fullData.nearest_drivers);
 
       } catch (error) {
-        console.error('Error fetching drivers:', error);
+        console.error('Error fetching drivers:', error); 
       }
     };
-
+ 
 
     const continueOrder = async () => {
       try {
@@ -62,11 +63,11 @@ export default function OrderRide({navigation}) {
             'Content-Type': 'application/json',
           }, 
           body: JSON.stringify({
-            userId:82,
+            userId: riderId,
             driverId: highestRatedDriver.driver_id,
             fare: 50,
-            from: "knust",
-            to: "kejetia",
+            from:pickupLocation,
+            to: dropOff,
             tripId:0// Replace with actual user ID
             
           }), 
@@ -95,7 +96,7 @@ export default function OrderRide({navigation}) {
 
 
 
-  return (
+  return ( 
 <>
          <View>
            <Text style={styles.textlabel1}>Enter pick-up location: </Text>
@@ -124,11 +125,9 @@ export default function OrderRide({navigation}) {
          </TouchableOpacity>
           </View>
 
-          <Pressable style={styles.button} onPress={() => navigation.navigate('DriverRequest')}>
-          <Text style={styles.buttonText}>Driver side</Text>
-         </Pressable> 
+         
 
-         <Pressable style={styles.button} onPress={() => navigation.navigate('RideStatus')}>
+         <Pressable style={styles.button} onPress={() => navigation.navigate('RideStatus', { riderId: riderId })}>
           <Text style={styles.buttonText}>Ride Status</Text>
          </Pressable> 
 

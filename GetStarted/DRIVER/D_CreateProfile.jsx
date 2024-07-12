@@ -4,17 +4,21 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Checkbox from 'expo-checkbox';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
+import * as ImagePicker from 'expo-image-picker';
 
-const CreateProfile = ({route,navigation}) => {
+const D_CreateProfile = ({route,navigation}) => {
     const [isChecked, setIsChecked] = useState(false);
     const [firstName, setFirstName] = useState('');
     const [fname, setFname] = useState('');
     const [lname, setLname] = useState('');
     const [lastName, setLastName] = useState('');
     const [contact, setContact] = useState('');
+    const [ghanaCard, setGhanaCard] = useState('GHA-');
+    const [address, setAddress] = useState('');
+    const [photo, setPhoto] = useState('');
     const [dataVerify, setDataVerify] = useState('');
     const [dataId, setDataId] = useState('');
-    const [block, setBlock] = useState(null);w
+    const [block, setBlock] = useState(null);
     const { identity} = route.params;
     console.log(identity)
 
@@ -22,21 +26,38 @@ const CreateProfile = ({route,navigation}) => {
         setIsChecked(newValue);
     };
 
+    const pickImage = async () => {
+      let result = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.Images,
+          allowsEditing: true,
+          aspect: [4, 3],
+          quality: 1,
+          base64: true,
+      });
+
+      console.log(result);
+
+      if (!result.canceled) {
+          setPhoto(result.uri);
+      }
+  };
+
     const handleProfileSubmit = async () => { 
       // Validate emailInput if needed  
      // const combinedOtp = otp.join(''); 
      // console.log('Combined OTP:', combinedOtp);     
-  
+   const photoBase64 = photo ? `data:image/jpeg;base64,${photo.base64}` : '';
+   console.log(photoBase64)
       // Send POST request to your backend     
       setBlock(null)
       console.log('Submitting Profile:', { identity, contact, firstName, lastName });
       try {
-        const response = await fetch('http://localhost:3001/mmotpsend2', {
+        const response = await fetch('http://localhost:3001/d_mmotpsend2', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json', 
           },
-          body: JSON.stringify({   identity:identity,contact:contact, firstName: firstName, lastName:lastName}),
+          body: JSON.stringify({   identity:identity,contact:contact, firstName: firstName, lastName:lastName, address: address, ghanacard: ghanaCard, photo: photoBase64}),
         });
     
         if (!response.ok) {
@@ -56,7 +77,7 @@ const CreateProfile = ({route,navigation}) => {
       
         } else if(data.message === 'OTP sent successfully'){
           console.log('OTP sent successfully')
-          navigation.navigate('ConfirmOTP2', { identity, contact, firstName, lastName }) 
+          navigation.navigate('ConfirmOTP2D', { identity: identity, contact:contact, firstName, lastName, photo, ghanacard:ghanaCard, address }) 
         }
         else if(data.error === 'Failed to send OTP email'){
           console.error('Error fetching data:', data.error);
@@ -96,12 +117,12 @@ const CreateProfile = ({route,navigation}) => {
       // Send POST request to your backend   
       console.log('Submitting Profile:', { identity, contact, firstName, lastName , dataId});
       try {
-        const response = await fetch('http://localhost:3001/mmotpsend3', {
+        const response = await fetch('http://localhost:3001/d_mmotpsend3', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json', 
           },
-          body: JSON.stringify({   identity,contact, firstName, lastName, dataId}),
+          body: JSON.stringify({   identity,contact, firstName, lastName, dataId, address: address, ghanacard: ghanaCard, photo: photo}),
         });
     
         if (!response.ok) {
@@ -121,7 +142,7 @@ const CreateProfile = ({route,navigation}) => {
       
         } else if(data.message === 'OTP sent successfully'){
           console.log('OTP sent successfully')
-          navigation.navigate('ConfirmOTP3', { identity, contact, firstName, lastName, dataId }) 
+          navigation.navigate('ConfirmOTP3D', { identity, contact, firstName, lastName, dataId, address: address, ghanacard: ghanaCard, photo: photo }) 
         
         } else{
           console.log('never')
@@ -143,12 +164,12 @@ const CreateProfile = ({route,navigation}) => {
       // Send POST request to your backend   
       console.log('Submitting Profile:', { identity, contact, firstName, lastName, dataId });
       try {
-        const response = await fetch('http://localhost:3001/mmotpsend3', {
+        const response = await fetch('http://localhost:3001/d_mmotpsend3', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json', 
           },
-          body: JSON.stringify({   identity,contact, firstName, lastName}),
+          body: JSON.stringify({   identity,contact, firstName, lastName, address: address, ghanacard: ghanaCard, photo: photo}),
         });
     
         if (!response.ok) {
@@ -168,7 +189,7 @@ const CreateProfile = ({route,navigation}) => {
       
         } else if(data.message === 'OTP sent successfully'){
           console.log('OTP sent successfully')
-          navigation.navigate('ConfirmOTP4', { identity, contact, firstName, lastName, dataId}) 
+          navigation.navigate('ConfirmOTP4D', { identity, contact, firstName, lastName, dataId, address: address, ghanacard: ghanaCard, photo: photo}) 
         
         } else{
           console.log('never')
@@ -189,12 +210,12 @@ const CreateProfile = ({route,navigation}) => {
       // Send POST request to your backend   
       console.log('Submitting Profile:', { identity, contact, firstName, lastName });
       try {
-        const response = await fetch('http://localhost:3001/mmotpsend3', {
+        const response = await fetch('http://localhost:3001/d_mmotpsend3', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json', 
           },
-          body: JSON.stringify({   identity,contact, firstName, lastName}),
+          body: JSON.stringify({   identity,contact, firstName, lastName, address: address, ghanacard: ghanaCard, photo: photo}),
         });
     
         if (!response.ok) {
@@ -214,7 +235,7 @@ const CreateProfile = ({route,navigation}) => {
       
         } else if(data.message === 'OTP sent successfully'){
           console.log('OTP sent successfully')
-          navigation.navigate('ConfirmOTP5', { identity, contact, firstName, lastName, dataId}) 
+          navigation.navigate('ConfirmOTP5D', { identity, contact, firstName, lastName, dataId, address: address, ghanacard: ghanaCard, photo: photo}) 
         
         } else{
           console.log('never')
@@ -268,6 +289,37 @@ const CreateProfile = ({route,navigation}) => {
       />
       </View>
 
+     
+      <Text style={styles.textlabel}>Photo: </Text>
+        <View>
+                            <TouchableOpacity onPress={pickImage}>
+                                <Text style={styles.buttonText}>Pick an image</Text>
+                            </TouchableOpacity>
+                            {photo && <Image source={{ uri: photo }} style={{ width: 200, height: 200 }} />}
+        </View>
+
+      <Text style={styles.textlabel}>Ghana Card ID: </Text>
+     <View>
+      <TextInput
+        style={styles.input}
+        placeholder="Enter your ghana card id"
+        keyboardType="text"  
+        value={ghanaCard}
+        onChangeText={(value) => setGhanaCard(value)} // Ensures the numeric keypad with phone number symbols
+      />
+      </View>
+
+      <Text style={styles.textlabel}>Residential Address: </Text>
+     <View>
+      <TextInput
+        style={styles.input}
+        placeholder="Enter your residential address"
+        keyboardType="text"  
+        value={address}
+        onChangeText={(value) => setAddress(value)} // Ensures the numeric keypad with phone number symbols
+      />
+      </View>
+
       {identity.includes('@')?(
          <>
       <Text style={styles.textlabel}>Phone numberr: </Text>
@@ -297,6 +349,7 @@ const CreateProfile = ({route,navigation}) => {
         </> 
 
       )}
+
 
       
     
@@ -404,7 +457,7 @@ const CreateProfile = ({route,navigation}) => {
   )
 }
 
-export default CreateProfile
+export default D_CreateProfile
 
 const styles = StyleSheet.create({
     container: {
@@ -488,7 +541,7 @@ const styles = StyleSheet.create({
     color: '#fff', // Text color
     fontSize: 16, // Font size
     fontWeight: 'bold', // Font weight
-  },
+  }, 
   container: {
     flex: 1,
     padding: 0, // Add padding around the entire container
@@ -509,6 +562,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row', // Arrange buttons in a row
     justifyContent: 'space-between', // Add space between the buttons
   },
+    imagePicker: {
+        marginTop: 10,
+        marginBottom: 10,
+    },
+    imagePickerText: {
+        color: '#1e90ff',
+        fontSize: 16,
+        textDecorationLine: 'underline',
+    },
+    image: {
+        width: 200,
+        height: 200,
+        marginVertical: 10,
+    },
  
 });
   

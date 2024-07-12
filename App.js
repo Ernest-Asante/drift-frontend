@@ -21,20 +21,35 @@ import SendParcel from './GetStarted/SendParcel';
 import EnterLocation from './GetStarted/EnterLocation';
 import DriverRequest from './GetStarted/DriverRequest';
 import RideStatus from './GetStarted/RiderConnecting';
+import D_HomeScreen from './GetStarted/DRIVER/D_HomeScreen';
+import D_Signup from './GetStarted/DRIVER/D_Signup';
+import D_ConfirmOTP from './GetStarted/DRIVER/D_ConfirmOTP';
+import D_ConfirmOTP2 from './GetStarted/DRIVER/D_ConfirmOTP2';
+import D_ConfirmOTP3 from './GetStarted/DRIVER/D_ConfirmOTP3';
+import D_ConfirmOTP4 from './GetStarted/DRIVER/D_ConfirmOTP4';
+import D_ConfirmOTP5 from './GetStarted/DRIVER/D_ConfirmOTP5';
+import D_DriverRequest from './GetStarted/DRIVER/D_DriverRequest';
+import D_CreateProfile from './GetStarted/DRIVER/D_CreateProfile';
+import D_CarDetail from './GetStarted/DRIVER/D_CreateCarProfile1';
+import D_CarDetail2 from './GetStarted/DRIVER/D_CreateCarProfile2';
+import LoadHome from './GetStarted/LoadHome';
 
 const Stack = createNativeStackNavigator();
 
 window.AsyncStorage = AsyncStorage;
 export default function App() { 
   const [isLoggedIn, setIsLoggedIn] = useState('');
-
+  const [type, setType] = useState('');
   
   async function getData(){
     const data = await AsyncStorage.getItem('key');
+    const data2 = await AsyncStorage.getItem('type');
     console.log(data)
+    console.log(data2)
     console.log(isLoggedIn)
     setIsLoggedIn(data)
-    console.log(isLoggedIn)
+    setType(data2)
+    console.log(data2)
   }
 
   useEffect(()=>{
@@ -50,21 +65,23 @@ export default function App() {
       </View>
     );
   }
-  return (
+  return ( 
     <> 
 
   <View style = {styles.container}> 
    <NavigationContainer>
-    {isLoggedIn === "verified"?(
+    {isLoggedIn === "verified"?( 
     <> 
      <Stack.Navigator >  
       
-     <Stack.Screen name="OrderRide"  options={{ headerShown: false }}  component={OrderRide} />
-     <Stack.Screen name="Signup" component={Signup}/>
-     <Stack.Screen name="ConfirmOTP" component={ConfirmOTP}/>
-     <Stack.Screen name="HomeScreen"   component={HomeScreen}/>
+    
+      <Stack.Screen name="LoadHome"  options={{ headerShown: false }}  component={LoadHome} />
+ 
+     
+     <Stack.Screen name="GetStarted" options={{ headerShown: false }} component={GetStarted}/>
      <Stack.Screen name="Payment" component={Payment}/>
-     <Stack.Screen name="GetStarted" component={GetStarted}/>
+     <Stack.Screen name="ConfirmOTP" component={ConfirmOTP}/>
+     <Stack.Screen name="Signup" component={Signup}/>
      <Stack.Screen name="CreateProfile" component={CreateProfile}/>
      <Stack.Screen name="ConfirmOTP2" component={ConfirmOTP2}/>  
      <Stack.Screen name="ConfirmOTP3" component={ConfirmOTP3}/>  
@@ -74,14 +91,29 @@ export default function App() {
      <Stack.Screen name="PanicDetail2" component={PanicDetail2}/>   
      <Stack.Screen name="DriverRequest" component={DriverRequest}/>   
      <Stack.Screen name="RideStatus" component={RideStatus}/>  
-     <Stack.Screen name="SendParcel" component={SendParcel}/>    
-     
+     <Stack.Screen name="SendParcel" component={SendParcel}/>   
+     <Stack.Screen name="OrderRide"   component={OrderRide} /> 
+     <Stack.Screen name="EnterLocation"   component={EnterLocation} />
+     <Stack.Screen name="HomeScreen" options={{ headerShown: false }} component={HomeScreen}/>  
+
+  
+    <Stack.Screen name="SignupD" component={D_Signup}/>
+    <Stack.Screen name="ConfirmOTPD" component={D_ConfirmOTP}/>
+    <Stack.Screen name="ConfirmOTP2D" component={D_ConfirmOTP2}/>
+    <Stack.Screen name="ConfirmOTP3D" component={D_ConfirmOTP3}/>
+    <Stack.Screen name="ConfirmOTP4D" component={D_ConfirmOTP4}/>
+    <Stack.Screen name="ConfirmOTP5D" component={D_ConfirmOTP5}/>
+    <Stack.Screen name="HomeScreenD" component={D_HomeScreen}/> 
+    <Stack.Screen name="DriverRequestD" component={D_DriverRequest}/>
+    <Stack.Screen name="DriverProfile" component={D_CreateProfile}/>
+    <Stack.Screen name="CarDetail" component={D_CarDetail}/>
+    <Stack.Screen name="CarDetail2" component={D_CarDetail2}/>
      
    </Stack.Navigator>  
    </>):(<>
     <Stack.Navigator >
       
-    <Stack.Screen name="HomeScreen"  options={{ headerShown: false }}  component={HomeScreen}/>
+    <Stack.Screen name="GetStarted"  options={{ headerShown: false }}  component={GetStarted}/>
     <Stack.Screen name="Signup" component={Signup}/>
     <Stack.Screen name="ConfirmOTP" component={ConfirmOTP}/>
     <Stack.Screen name="CreateProfile" component={CreateProfile}/>
@@ -95,7 +127,21 @@ export default function App() {
     <Stack.Screen name="DriverRequest" component={DriverRequest}/> 
     <Stack.Screen name="OrderRide"   component={OrderRide} /> 
     <Stack.Screen name="RideStatus" component={RideStatus}/>  
-    <Stack.Screen name="SendParcel" component={SendParcel}/>    
+    <Stack.Screen name="SendParcel" component={SendParcel}/>  
+    <Stack.Screen name="HomeScreen" options={{ headerShown: false }} component={HomeScreen}/>   
+    <Stack.Screen name="EnterLocation"   component={EnterLocation} />
+
+    <Stack.Screen name="SignupD" component={D_Signup}/>
+    <Stack.Screen name="ConfirmOTPD" component={D_ConfirmOTP}/>
+    <Stack.Screen name="ConfirmOTP2D" component={D_ConfirmOTP2}/>
+    <Stack.Screen name="ConfirmOTP3D" component={D_ConfirmOTP3}/>
+    <Stack.Screen name="ConfirmOTP4D" component={D_ConfirmOTP4}/>
+    <Stack.Screen name="ConfirmOTP5D" component={D_ConfirmOTP5}/>
+    <Stack.Screen name="HomeScreenD" component={D_HomeScreen}/>
+    <Stack.Screen name="DriverRequestD" component={D_DriverRequest}/>
+    <Stack.Screen name="DriverProfile" component={D_CreateProfile}/>
+    <Stack.Screen name="CarDetail" component={D_CarDetail}/>
+    <Stack.Screen name="CarDetail2" component={D_CarDetail2}/>
     
   </Stack.Navigator>
   </>)
@@ -110,7 +156,7 @@ export default function App() {
   );
 }
  
-const styles = StyleSheet.create({
+const styles = StyleSheet.create({ 
   container: {
     flex: 1,   
     backgroundColor: '#fff',

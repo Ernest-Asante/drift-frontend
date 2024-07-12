@@ -73,7 +73,8 @@ const PanicDetail = ({route,navigation}) => {
           // Navigate to next screen (ConfirmOTP or wherever needed)
           AsyncStorage.setItem('key', "verified");
           AsyncStorage.setItem('id', identity)
-          navigation.navigate('Payment', { identity:identity});
+          AsyncStorage.setItem('type', "rider")
+          navigation.navigate('HomeScreen', { identity:identity});
         } else { 
           console.error('Failed to add data:', data.message);
           // Show an alert or other notification to the user

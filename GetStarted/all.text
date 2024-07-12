@@ -1,0 +1,58 @@
+ <NavigationContainer>
+    {isLoggedIn === "verified"?(
+    <> 
+     <Stack.Navigator >  
+      
+     <Stack.Screen name="Payment"  options={{ headerShown: false }}  component={Payment} />
+     <Stack.Screen name="Signup" component={Signup}/>
+     <Stack.Screen name="ConfirmOTP" component={ConfirmOTP}/>
+    
+     <Stack.Screen name="Payment" component={Payment}/>
+    
+     <Stack.Screen name="CreateProfile" component={CreateProfile}/>
+     <Stack.Screen name="ConfirmOTP2" component={ConfirmOTP2}/>  
+     <Stack.Screen name="ConfirmOTP3" component={ConfirmOTP3}/>  
+     <Stack.Screen name="ConfirmOTP4" component={ConfirmOTP4}/> 
+     <Stack.Screen name="ConfirmOTP5" component={ConfirmOTP5}/> 
+     <Stack.Screen name="PanicDetail" component={PanicDetail}/>   
+     <Stack.Screen name="PanicDetail2" component={PanicDetail2}/>   
+     <Stack.Screen name="DriverRequest" component={DriverRequest}/>   
+     <Stack.Screen name="RideStatus" component={RideStatus}/>  
+     <Stack.Screen name="SendParcel" component={SendParcel}/>    
+     
+     
+   </Stack.Navigator>  
+   </>):(<>
+    <Stack.Navigator >
+      
+    <Stack.Screen name="GetStarted"  options={{ headerShown: false }}  component={GetStarted}/>
+    <Stack.Screen name="Signup" component={Signup}/>
+    <Stack.Screen name="ConfirmOTP" component={ConfirmOTP}/>
+    <Stack.Screen name="CreateProfile" component={CreateProfile}/>
+    <Stack.Screen name="Payment" component={Payment}/>
+    <Stack.Screen name="ConfirmOTP2" component={ConfirmOTP2}/>
+    <Stack.Screen name="ConfirmOTP3" component={ConfirmOTP3}/>  
+     <Stack.Screen name="ConfirmOTP4" component={ConfirmOTP4}/> 
+     <Stack.Screen name="ConfirmOTP5" component={ConfirmOTP5}/>
+    <Stack.Screen name="PanicDetail" component={PanicDetail}/>
+    <Stack.Screen name="PanicDetail2" component={PanicDetail2}/> 
+    <Stack.Screen name="DriverRequest" component={DriverRequest}/> 
+    <Stack.Screen name="OrderRide"   component={OrderRide} /> 
+    <Stack.Screen name="RideStatus" component={RideStatus}/>  
+    <Stack.Screen name="SendParcel" component={SendParcel}/>    
+    
+  </Stack.Navigator>
+  </>)
+    }
+     
+    </NavigationContainer>
+
+
+
+      <Pressable style={styles.buttonGoogle} onPress={() => navigation.navigate('ConfirmOTP')}>
+          <Text style={styles.buttonTextGoogle}>CONTINUE WITH GOOGLE</Text>
+      </Pressable> 
+
+      <Pressable style={styles.buttonApple} onPress={() => navigation.navigate('HomeScreen')}>
+          <Text style={styles.buttonTextApple}>CONTINUE WITH APPLE</Text>
+      </Pressable> 

@@ -7,17 +7,16 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
-function ConfirmOTP5({route, navigation}){ 
+function D_ConfirmOTP({route, navigation}){ 
     const [otp, setOtp] = useState(["", "", "", ""]); 
     const [timeOut, setTimeOut] = useState(false);
-    const { contact,identity, firstName, lastName, dataId } = route.params;
-    console.log(dataId)
+    const { identity } = route.params;
 
     const [timeLeft, setTimeLeft] = useState(30); // 60 seconds countdown
-  
+
   useEffect(() => { 
     // Countdown timer logic 
-    if (timeLeft === 0) {
+    if (timeLeft === 0) { 
       setTimeOut(true)
     };
 
@@ -35,7 +34,7 @@ function ConfirmOTP5({route, navigation}){
       setOtp(newOtp); 
   
       // Move to next input
-      if (text && index < 3) {
+      if (text && index < 3) { 
         // Focus the next input
         this[`input_${index + 1}`].focus();
       }
@@ -49,12 +48,12 @@ function ConfirmOTP5({route, navigation}){
   
       // Send POST request to your backend
       try {
-        const response = await fetch('http://localhost:3001/otpresend2', {
+        const response = await fetch('http://localhost:3001/d_otpresend', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ identity: identity, contact: contact, dataId: dataId}),
+          body: JSON.stringify({ identity: identity}),
         });
    
         if (!response.ok) {
@@ -62,11 +61,11 @@ function ConfirmOTP5({route, navigation}){
         }
    
         const data = await response.json();
-        console.log('otp added successfully:', data);
+        console.log('Email added successfully:', data);
   
         // Navigate to next screen (ConfirmOTP or wherever needed)
         if (data.message === 'OTP sent successfully') {
-          console.log('otp added successfully:', data.message);
+          console.log('Email added successfully:', data.message);
           setTimeOut(false)
           setTimeLeft(30)
           // Navigate to next screen (ConfirmOTP or wherever needed)
@@ -88,46 +87,56 @@ function ConfirmOTP5({route, navigation}){
     const handleOTPSubmit = async () => {
       try {
         const combinedOtp = otp.join('');
-        console.log('Combined OTP:', combinedOtp); 
+        console.log('Combined OTP:', combinedOtp);
   
-        const response = await fetch('http://localhost:3001/mmverifyotp4', {
+        const response = await fetch('http://localhost:3001/d_mmverifyotp', {
           method: 'POST',
-          headers: {  
+          headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ identity: identity, otp: combinedOtp, contact: contact, firstName: firstName, lastName: lastName, dataId: dataId}),
-        }); 
+          body: JSON.stringify({ identity: identity, otp: combinedOtp }),
+        });  
   
      /*   if (!response.ok) {
-          throw new Error('Failed to verify OTP'); 
+          throw new Error('Failed to verify OTP');
         } */
   
         const data = await response.json();
-        console.log('OTP verification successful:', data); 
+       // console.log('OTP verification successful:', data);
+       if(data.error === 'Error fetching data'){
+        console.log('error fetching data')
+       }
 
           // Navigate to next screen (ConfirmOTP or wherever needed)
-      if (data.error === 'error fetching data') {
-        console.log('an error occured:', data.error);
+      if (data.message === 'Invalid OTP') {
+        console.log('invalid otp:', data.message);
         // Navigate to next screen (ConfirmOTP or wherever needed)
-       // AsyncStorage.setItem('token', "good")
-       // navigation.navigate('Payment', { contact });
-      } else if(data.message === 'Invalid OTP'){
-        console.log('Invalid OTP') 
-      } else if(data.message === 'OTP has expired'){  
-        console.error('OTP has expired:', data.message);
+      //  AsyncStorage.setItem('token', "good")
+       // navigation.navigate('CreateProfile', { identity });
+      } else if(data.message === 'OTP has expired'){
+        console.log('OTP has expired') 
+      } else {  
+        console.log('OTP verified:');
         // Show an alert or other notification to the user
-      } else if(data.message === 'Error deleting data'){  
-        console.error('Error deleting data:', data.message);
-        // Show an alert or other notification to the user
-      }    else if(data.message === 'OTP verified'){
-        console.log('OTP verified') 
-        AsyncStorage.setItem('key', "verified");
-        AsyncStorage.setItem('id', contact)
-        navigation.navigate('HomeScreen', { identity:contact }); 
-      
-      }  else if(data.error === 'Unexpected error'){
-        console.log('Unexpected error') 
+        if(data.verify === 'User not verified'){
+          console.log('user not verified') 
+          navigation.navigate('DriverProfile', { identity });
+        } else if(data.verify === 'User panic details not found'){
+          console.log('user panic details not found')  
+          navigation.navigate('CarDetail', { identity });
+        } else{
+          console.log('user is fully inclusive') 
+          AsyncStorage.setItem('key', "verified");
+          AsyncStorage.setItem('id', identity)
+          AsyncStorage.setItem('type', "driver");
+          navigation.navigate('HomeScreenD', { identity:identity });
+        }
+       
       }
+
+     
+
+  
         // Navigate to the next screen (e.g., CreateProfile) upon successful OTP verification
       
       } catch (error) {
@@ -141,8 +150,8 @@ function ConfirmOTP5({route, navigation}){
      <Text style={styles.title}>Drift</Text>
     </View>
     <View>
-      <Text style={styles.textlabel}>Enter the 4-digit code sent to you at: {contact}</Text>
-      <Text>Identity: {contact}</Text>
+      <Text style={styles.textlabel}>Enter the 4-digit code sent to you at: {identity}</Text>
+      <Text>Identity: {identity}</Text>
     </View>
 
     <View style={styles.inputstyle}> 
@@ -188,7 +197,7 @@ function ConfirmOTP5({route, navigation}){
   )
 }
 
-export default ConfirmOTP5
+export default D_ConfirmOTP
 
 const styles = StyleSheet.create({
     container: {
