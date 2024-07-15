@@ -19,11 +19,11 @@ function GetStarted({ navigation }) {
       
       <Text style={styles.text}>Continue as: </Text>
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Signup')}>
-          <Text style={styles.buttonText}>Drift Rider</Text>
+          <Text style={styles.buttonText}>RIDER</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('SignupD')}>
-          <Text style={styles.buttonText}>Drift Driver</Text>
+          <Text style={styles.buttonText}>DRIVER</Text>
       </TouchableOpacity>
     </View>
    </>
@@ -42,18 +42,18 @@ const styles = StyleSheet.create({
    
     },
     image: {
-        width: 100,
-        height: 100,
+        width: 160,
+        height: 160,
         borderRadius: 75, 
         marginBottom: 20
        
      },
     name : {
-        fontSize: 35,
+        fontSize: 50,
         margin: 20
     },
      description : {
-        fontSize: 20,
+        fontSize: 30,
         margin: 12
     },
      

@@ -14,7 +14,7 @@ const CreateProfile = ({route,navigation}) => {
     const [contact, setContact] = useState('');
     const [dataVerify, setDataVerify] = useState('');
     const [dataId, setDataId] = useState('');
-    const [block, setBlock] = useState(null);w
+    const [block, setBlock] = useState(null);
     const { identity} = route.params;
     console.log(identity)
 
@@ -31,7 +31,7 @@ const CreateProfile = ({route,navigation}) => {
       setBlock(null)
       console.log('Submitting Profile:', { identity, contact, firstName, lastName });
       try {
-        const response = await fetch('http://localhost:3001/mmotpsend2', {
+        const response = await fetch('http://10.20.32.58:3001/mmotpsend2', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json', 
@@ -96,7 +96,7 @@ const CreateProfile = ({route,navigation}) => {
       // Send POST request to your backend   
       console.log('Submitting Profile:', { identity, contact, firstName, lastName , dataId});
       try {
-        const response = await fetch('http://localhost:3001/mmotpsend3', {
+        const response = await fetch('http://10.20.32.58:3001/mmotpsend3', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json', 
@@ -143,7 +143,7 @@ const CreateProfile = ({route,navigation}) => {
       // Send POST request to your backend   
       console.log('Submitting Profile:', { identity, contact, firstName, lastName, dataId });
       try {
-        const response = await fetch('http://localhost:3001/mmotpsend3', {
+        const response = await fetch('http://10.20.32.58:3001/mmotpsend3', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json', 
@@ -189,7 +189,7 @@ const CreateProfile = ({route,navigation}) => {
       // Send POST request to your backend   
       console.log('Submitting Profile:', { identity, contact, firstName, lastName });
       try {
-        const response = await fetch('http://localhost:3001/mmotpsend3', {
+        const response = await fetch('http://10.20.32.58:3001/mmotpsend3', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json', 
@@ -270,7 +270,7 @@ const CreateProfile = ({route,navigation}) => {
 
       {identity.includes('@')?(
          <>
-      <Text style={styles.textlabel}>Phone numberr: </Text>
+      <Text style={styles.textlabel}>Phone number: </Text>
       <View>
        <TextInput
          style={styles.input}
@@ -390,7 +390,7 @@ const CreateProfile = ({route,navigation}) => {
           <Text style={styles.infoText}>{block}</Text> 
        ):(<></>)}
         <Pressable style={styles.button} onPress={handleProfileSubmit}>
-        <Text style={styles.buttonText}>Continue</Text>
+        <Text style={styles.buttonText}>CONTINUE</Text>
         </Pressable>
         </>
       )}
@@ -424,14 +424,17 @@ const styles = StyleSheet.create({
     title: {
       color: 'white',              // Text color is white
       fontSize: 25,
-      marginLeft: "8px"  
+      marginLeft: 10
     },
     textlabel: {
-      fontSize: "15px",
-      margin: "1px"
+      fontSize: 20,
+      margin: "1px",
+      top:8,
+      left:10,
+      bottom:10
     },
     input: {
-    height: 30,
+    height: 40,
     marginLeft: "2%",  // Sets a fixed height for the input
     width: '96%',  // Makes the input take the full width of its container
     marginVertical: 10,  // Adds vertical margin for spacing
@@ -442,19 +445,22 @@ const styles = StyleSheet.create({
     },
    
    privacytext: {
-   fontSize: "10px",
+   fontSize: 12,
    marginLeft: "5px",
-   marginTop: 25
+   left:5,
+   marginTop: 10
    },
    button: {
-    width: '70%',
+    width: '80%',
     padding: 15,
+    marginLeft:'12%',
     backgroundColor: '#1e90ff',
     borderRadius: 6,
     alignItems: 'center',
     justifyContent: "center",
-    position: 'absolute',
-    bottom: 2,
+    position: 'fixed',
+    bottom:0,
+    top:50,
     marginLeft: "10%"
    
    
@@ -480,7 +486,8 @@ const styles = StyleSheet.create({
     height: 50, // Set a fixed height for the buttons
     backgroundColor: '#1e90ff', // Background color for the buttons
     borderRadius: 6, // Rounded corners
-    alignItems: 'center', // Center the text horizontally
+    alignItems: 'center',
+    margin:10, // Center the text horizontally
     justifyContent: 'center', // Center the text vertically
     marginBottom: 10, // Add margin below the buttons
   },
@@ -496,14 +503,16 @@ const styles = StyleSheet.create({
   },
   infoText: {
     marginBottom: 10, // Add margin below the first text
-    fontSize: 16, // Adjust the font size as needed
+    fontSize: 17, 
+    margin:10// Adjust the font size as needed
   },
   innerContainer: {
     marginTop: 20, // Add margin at the top of the inner container
   },
   accountText: {
     marginBottom: 20, // Add margin below the account text
-    fontSize: 16, // Adjust the font size as needed
+    fontSize: 16,
+    left:10 // Adjust the font size as needed
   },
   buttonContainer: {
     flexDirection: 'row', // Arrange buttons in a row

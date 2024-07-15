@@ -1,19 +1,98 @@
 import { View, Text, StyleSheet, Image, Pressable, TouchableOpacity,SafeAreaView} from 'react-native'
 import React,{useEffect, useState} from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'; 
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import MapView, {Marker} from 'react-native-maps';
+import * as Location from 'expo-location';
+
 
 const getstarted = require('../assets/getstarted.jpeg');
+
+const carr = require('../assets/carr.jpg');
+
 const HomeScreen = ({route,navigation}) => {
   const [dataId, setDataId] = useState('');
+  const [location, setLocation] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
+  const [lat, setLat] = useState(null);
+  const [long, setLong] = useState(null);
+//  const [carList, setCarList] = useState(null);
   const { identity } = route.params;
   console.log(identity)
 
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
 
+      try {
+        let location = await Location.getCurrentPositionAsync({});
+        setLocation(location);
+        console.log(location)
+        setLat(location.coords.latitude)
+        setLong(location.coords.longitude)
+
+       
+      } catch (error) {
+        setErrorMsg('Failed to fetch location');
+        console.log(errorMsg)
+      }
+     
+
+    })();
+  }, []);
+
+  const  carList = ([
+    {
+      id: 1,
+      latitude: 6.6695 + 0.0079,
+      longitude:  -1.560 + 0.0067,
+      title: "ayeduase"
+    },
+    {
+      id: 2,
+      latitude: 6.6695+ 0.0063,
+      longitude:  -1.560 + 0.0121,
+      title: "commercial area"
+    },
+    {
+      id: 3,
+      latitude: 6.6695 - 0.014,
+      longitude:  -1.560 + 0.0006,
+      title: "main entrance"
+    },
+    {
+      id: 4,
+      latitude:6.6695 + 0.022,
+      longitude: -1.560 + 0.0102,
+      title: "indece hall"
+    },
+    {
+      id: 5,
+      latitude: 6.6695 + 0.0123,
+      longitude:  -1.560 - 0.0142,
+      title: "ksb"
+    },
+    {
+      id: 6,
+      latitude: 6.6695 + 0.0023,
+      longitude: -1.5607 + 0.0042,
+      title: "one"
+    },
+    {
+      id: 7,
+      latitude:6.6695 + 0.0045,
+      longitude:  -1.560 - 0.0174,
+      title: "two"
+    },
+  ]);
+  
   useEffect(() => {
     const fetchUserId = async () => {
       try {
-        const response = await fetch('http://localhost:3001/getfirstname', {
+        const response = await fetch('http://10.20.32.58:3001/getfirstname', {
           method: 'POST',
           headers: { 
             'Content-Type': 'application/json', 
@@ -32,7 +111,7 @@ const HomeScreen = ({route,navigation}) => {
       } catch (error) { 
         console.error('Error fetching userId:', error.message);
       }  finally {
-        setLoading(false); // Set loading to false once data is fetched
+      //  setLoading(false); // Set loading to false once data is fetched
       }
     };
 
@@ -57,31 +136,51 @@ const HomeScreen = ({route,navigation}) => {
 
   return (
     <View style={styles.container}>
-      <Text>HomeScreen</Text>
-     
+   
      
       <TouchableOpacity style={styles.button} onPress={signOut}>
           <Text style={styles.buttonText}>Signout</Text>
         </TouchableOpacity> 
-        <SafeAreaView style={{height: '100%'}}>
-        <GooglePlacesAutocomplete
-      placeholder='Search'
-      minLength={2}
-      onFail={(err) => console.error(err)}
-      fetchDetails={true}
-      currentLocation={true}
-      listViewDisplayed="auto"
-      onPress={(data, details = null) => {
-        // 'details' is provided when fetchDetails = true
-        console.log(data, details);
-      }}
-      query={{
-        key: 'AIzaSyCW7L8qQi78TOlySI6lc5ThzDKvqWmY0b8',
-        language: 'en',
-      }}
+      
+     <View style={styles.container}>
      
-    />
-    </SafeAreaView>
+      <MapView style={styles.map} 
+      initialRegion={{
+        latitude: 6.6695,
+        longitude: -1.5607,
+        latitudeDelta: 0.095,
+        longitudeDelta: 0.0421,
+      }}>
+         <Marker
+      
+      coordinate={{latitude: 6.6695, longitude: -1.5607}}
+      title={"knust"}
+      description={"knust location"}
+   //   pinColor= {"#4287f5"} 
+      />
+
+         
+     {
+      carList.map((car)=>{
+        return(
+          <Marker
+          key={car.id}
+          coordinate={{latitude:car.latitude, longitude:car.longitude}}
+          title={car.title}
+        
+          >
+              <Image
+              source={carr}
+              style={{ width: 32, height: 32 }} // Adjust size as needed
+            />
+          </Marker>
+        )
+
+      })
+     }
+
+      </MapView> 
+     </View>
 
       <View style={styles.main}>
          <Text style={styles.main1}>KELVIN, how may we help you today?</Text>
@@ -139,7 +238,7 @@ const styles = StyleSheet.create({
     main: {
         height: '20vh',                  // Height is 50 pixels
         width: '100%',               // Width is 100% of the parent
-       backgroundColor: '#1e90ff',     // Background color is blue
+       backgroundColor: 'white',     // Background color is blue
        // justifyContent: 'center',    // Vertically center the text inside the container
         alignItems: 'left',
         marginTop: '70vh'
@@ -158,11 +257,13 @@ const styles = StyleSheet.create({
     main3: {
         height: '8vh',                  // Height is 50 pixels
         width: '45%',               // Width is 100% of the parent
-        backgroundColor: 'yellow',
+        backgroundColor: '#f0f0f0',
         margin: 5,
         borderRadius: 5,
         flexDirection: 'row', // Arrange buttons in a row
         justifyContent: 'space-around',
+         borderWidth: 1,           // 1 pixel border width
+  borderColor: '#808080'
        // justify: 'center'
 
       
@@ -171,11 +272,13 @@ const styles = StyleSheet.create({
     main4: {
         height: '8vh',                  // Height is 50 pixels
         width: '45%',               // Width is 100% of the parent
-        backgroundColor: 'yellow',
+        backgroundColor: '#f0f0f0',
         margin: 5,
         borderRadius: 5,
         flexDirection: 'row', // Arrange buttons in a row
         justifyContent: 'space-around',
+         borderWidth: 1,           // 1 pixel border width
+  borderColor: '#808080'
         
     },
     image: {
@@ -188,5 +291,9 @@ const styles = StyleSheet.create({
      },
      rideText: {
         marginTop: 4
-     }
+     },
+     map: {
+      width: '100%',
+      height: '99%',
+    },
   });

@@ -1,245 +1,299 @@
-import { StyleSheet, Text, View, TextInput, TouchableOpacity ,Pressable} from 'react-native'
-import React, {useState, useEffect} from 'react'
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { View, Text, StyleSheet, Image, Pressable, TouchableOpacity,SafeAreaView} from 'react-native'
+import React,{useEffect, useState} from 'react'
+import AsyncStorage from '@react-native-async-storage/async-storage'; 
+import MapView, {Marker} from 'react-native-maps';
+import * as Location from 'expo-location';
 
-export default function D_HomeScreen({navigation,route}) {
-  const [data, setData] = useState('');
-  const [acceptData, setAcceptData] = useState('');
-  const [rejectData, setRejectData] = useState('');
 
+const getstarted = require('../../assets/getstarted.jpeg');
+
+const carr = require('../../assets/carr.jpg');
+
+const D_HomeScreen = ({route,navigation}) => {
+//  const [dataId, setDataId] = useState('');
+  const [location, setLocation] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
+  const [lat, setLat] = useState(null);
+  const [long, setLong] = useState(null);
+  //const [carList, setCarList] = useState(null);
   const { identity } = route.params;
   console.log(identity)
+
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
+
+      try {
+        let location = await Location.getCurrentPositionAsync({});
+        setLocation(location);
+        console.log(location)
+        setLat(location.coords.latitude)
+        setLong(location.coords.longitude)
+
+       
+      } catch (error) {
+        setErrorMsg('Failed to fetch location');
+        console.log(errorMsg)
+      }
+     
+
+    })();
+  }, []);
+
+  const  carList = ([
+    {
+      id: 1,
+      latitude: 6.6695 + 0.0069,
+      longitude:  -1.560 + 0.0007,
+      title: "ayeduase"
+    },
+    {
+      id: 2,
+      latitude: 6.6695+ 0.0003,
+      longitude:  -1.560 + 0.0051,
+      title: "commercial area"
+    },
+    {
+      id: 3,
+      latitude: 6.6695 - 0.024,
+      longitude:  -1.560 + 0.046,
+      title: "main entrance"
+    },
+    {
+      id: 4,
+      latitude:6.6695 + 0.032,
+      longitude: -1.560 + 0.0302,
+      title: "indece hall"
+    },
+    {
+      id: 5,
+      latitude: 6.6695 + 0.0123,
+      longitude:  -1.560 + 0.0242,
+      title: "ksb"
+    },
+    {
+      id: 6,
+      latitude: 6.6695 + 0.0023,
+      longitude: -1.5607 + 0.01242,
+      title: "one"
+    },
+    {
+      id: 7,
+      latitude:6.6695 + 0.0045,
+      longitude:  -1.560 + 0.0634,
+      title: "two"
+    },
+  ]);
+ 
+  /*useEffect(() => {
+    const fetchUserId = async () => {
+      try {
+        const response = await fetch('http://10.20.32.58:3001/d_getfirstname', {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json', 
+          },
+          body: JSON.stringify({ identity: identity}), 
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch userId');
+        } 
+
+        const data = await response.json();
+        setDataId(data.dataId);  
+        console.log(dataId)
+        console.log(data)
+      } catch (error) { 
+        console.error('Error fetching userId:', error.message);
+      }  finally {
+      //  setLoading(false); // Set loading to false once data is fetched
+      }
+    };
+
+    fetchUserId();
+  }, [identity]); */
 
   const signOut = async () => {
     try {
       // Remove the 'token' key from AsyncStorage
-      await AsyncStorage.removeItem('key'); 
+      await AsyncStorage.removeItem('key');
       await AsyncStorage.removeItem('id');
       await AsyncStorage.removeItem('type');
 
       console.log('Success', 'You have been signed out.');
-      navigation.navigate('GetStarted') 
+      navigation.navigate('GetStarted')
     } catch (error) { 
-      console.error('Error signing out:', error);  
+      console.error('Error signing out:', error); 
     
     }
   };
 
-    const fetchDrivers = async () => {
-      try {
-        const response = await fetch('http://localhost:3001/riderequest', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          }, 
-          body: JSON.stringify({ identity: identity }),
-         
-        });
-
-        if (!response.ok) { 
-          throw new Error('Network response was not ok'); 
-        } 
- 
-        const data = await response.json(); 
-        console.log(data[0].ride_request)
-        // Assuming the response contains the highest rated driver directly
-        setData(data[0].ride_request); 
-       // console.log(data) 
-       
-
-        // If you want to get all nearest drivers and find the highest rated in the client side
-         //const { nearest_drivers } = data;
-        
-
-      } catch (error) {
-        console.error('Error fetching drivers:', error);
-      }
-    };
-
-
-    const acceptRide = async () => {
-        try {
-          const response = await fetch('http://localhost:3001/acceptride', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            }, 
-            body: JSON.stringify({
-              userId:data.riderId,
-              driverId:data.driverId,
-                driverId: data.driverId,
-                time:" 4 minutes",
-                model: `${data.colour, data.name} `,
-                Plate: data.license,
-                tripId:0,
-                
-              // Replace with actual user ID
-              
-            })
-          })
-  
-          if (!response.ok) { 
-            throw new Error('Network response was not ok'); 
-          }
-  
-          const data = await response.json(); 
-   
-          // Assuming the response contains the highest rated driver directly
-          setAcceptData(data); 
-  
-          // If you want to get all nearest drivers and find the highest rated in the client side
-           //const { nearest_drivers } = data;
-          
-  
-        } catch (error) {
-          console.error('Error fetching drivers:', error);
-        }
-      };
- 
-
-      const rejectRide = async () => {
-        try {
-          const response = await fetch('http://localhost:3001/rejectride', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            }, 
-            body: JSON.stringify({
-              userId:82,
-              driverId: 14 // Replace with actual user ID
-              
-            }), 
-          }); 
-  
-          if (!response.ok) { 
-            throw new Error('Network response was not ok'); 
-          }
-  
-          const data = await response.json(); 
-   
-          // Assuming the response contains the highest rated driver directly
-          setRejectData(data); 
-
-          console.log(rejectData)
-  
-          // If you want to get all nearest drivers and find the highest rated in the client side
-           //const { nearest_drivers } = data;
-          
-  
-        } catch (error) {
-          console.error('Error fetching drivers:', error);
-        }
-      };
-
-    useEffect(()=>{
-      fetchDrivers()
-    },[])
-
-   /* if(!data){
-        return <Text>Loading</Text>
-    }*/
-
-   
-
-
 
   return (
-<>
-<View>
-
-       <TouchableOpacity style={styles.button} onPress={signOut}>
+    <View style={styles.container}>
+   
+     
+      <TouchableOpacity style={styles.button} onPress={signOut}>
           <Text style={styles.buttonText}>Signout</Text>
         </TouchableOpacity> 
-          <TouchableOpacity style={styles.button} onPress={fetchDrivers}>
-          <Text style={styles.buttonText}>Continue</Text>
-         </TouchableOpacity>
-          </View>
-
-          {data && (
-        <>
-        <View style={styles.driverCard}>
-          <Text style={styles.title}>Available Ride</Text>
-          <Text>Trip ID: {data.tripId}</Text>
-          <Text>Rider ID: {data.riderId}</Text>
-          <Text>From: {data.from}</Text>
-          <Text>Destination: {data.to}</Text>
-          <Text>Fare: {data.fare}</Text>
-        </View>
-        </>)}
       
-
-
-          <View>
-          <TouchableOpacity style={styles.button} onPress={acceptRide}>
-          <Text style={styles.buttonText}>ACCEPT</Text>
-         </TouchableOpacity>
-          </View>
-
-          <View>
-          <TouchableOpacity style={styles.button} onPress={rejectRide}>
-          <Text style={styles.buttonText}>REJECT</Text>
-         </TouchableOpacity> 
-          </View>
-
+     <View style={styles.container}>
      
-</>
-    
+      <MapView style={styles.map} 
+      initialRegion={{
+        latitude: lat,
+        longitude: long,
+        latitudeDelta: 0.095,
+        longitudeDelta: 0.0421,
+      }}>
+         <Marker
+      
+      coordinate={{latitude: lat, longitude: long}}
+      title={"knust"}
+      description={"knust location"}
+   //   pinColor= {"#4287f5"} 
+      />
+
+         
+     {
+      carList.map((car)=>{
+        return(
+          <Marker
+          key={car.id}
+          coordinate={{latitude:car.latitude, longitude:car.longitude}}
+          title={car.title}
+        
+          >
+              <Image
+              source={carr}
+              style={{ width: 32, height: 32 }} // Adjust size as needed
+            />
+          </Marker>
+        )
+
+      })
+     }
+
+      </MapView> 
+     </View>
+
+      <View style={styles.main}>
+         <Text style={styles.main1}>KELVIN, how may we help you today?</Text>
+         <View style={styles.main2}>
+       
+           
+           <Pressable style={styles.main3} onPress={() => navigation.navigate('OrderRide', { riderId:dataId})}>
+           <Image 
+              source={getstarted}
+              style={styles.image} />
+            <View>
+                <Text  style={styles.rideText}>DRIFT RIDE</Text>
+                <Text >Order a ride</Text> 
+            </View>
+            </Pressable>
+          
+        
+           <Pressable style={styles.main4} onPress={() => navigation.navigate('SendParcel', { riderId:dataId})}>
+           <Image 
+              source={getstarted}
+              style={styles.image} />
+            <View>
+                <Text  style={styles.rideText}>DRIFT SEND</Text>
+                <Text >Send a parcel</Text>
+            </View>
+          </Pressable>
+         </View>
+        </View>
+    </View>
   )
 }
 
+export default D_HomeScreen
+
 const styles = StyleSheet.create({
-  textlabel1: {
-    fontSize: "15px",
-    margin: "1px"
-  },
-  textlabel2: {
-    fontSize: "15px",
-    margin: "1px", 
-    marginTop:10
-  },
-  input: {
-  height: 30,
-  marginLeft: "2%",  // Sets a fixed height for the input
-  width: '96%',  // Makes the input take the full width of its container
-  marginVertical: 10,  // Adds vertical margin for spacing
-  borderWidth: 1,  // Adds a border to the input field  // Sets the border color
-  paddingLeft: 10,  // Padding inside the input for text
-  borderRadius: 5,  // Rounds the corners of the input field
-   // Sets the background color to grey
-  },
-  button: {
-    width: 200,
-    padding: 5,
-    backgroundColor: '#1e90ff',
-    borderRadius: 6,
-    height: 50,
-    bottom: 1,
-    margin: 5
-},
-buttonText: {
-    color: '#fff',
-    fontSize: 20,
-    fontWeight: 'bold',
-    textAlign: "center"
-},
-container: {
-  flex: 1,
-  padding: 16,
-  backgroundColor: '#fff',
-},
-driverCard: {
-  padding: 16,
-  marginVertical: 8,
-  backgroundColor: '#f9f9f9',
-  borderRadius: 8,
-  shadowColor: '#000',
-  shadowOpacity: 0.1,
-  shadowRadius: 4,
-  shadowOffset: { width: 0, height: 2 },
-},
-title: {
-  fontSize: 18,
-  fontWeight: 'bold',
-  marginBottom: 8,
-},
-})
+    container: {
+      flex: 1,   
+      backgroundColor: '#fff',
+    
+    },
+    loadingContainer: {
+      flex: 1, 
+      justifyContent: 'center', 
+      alignItems: 'center',
+    }, 
+    button:{
+      height:50, 
+      width:200,
+      color:"blue"
+    },
+    buttonText: {
+      fontSize: 12
+    },
+
+    main: {
+        height: '20vh',                  // Height is 50 pixels
+        width: '100%',               // Width is 100% of the parent
+       backgroundColor: 'white',     // Background color is blue
+       // justifyContent: 'center',    // Vertically center the text inside the container
+        alignItems: 'left',
+        marginTop: '70vh'
+    },
+    main1: {
+        color: 'black',              // Text color is white
+        fontSize: 18,
+        marginLeft: "8px",
+        marginBottom: 15
+    },
+    main2: {
+        flexDirection: 'row', // Arrange buttons in a row
+        justifyContent: 'space-between',
+        marginBottom:2
+    },
+    main3: {
+        height: '8vh',                  // Height is 50 pixels
+        width: '45%',               // Width is 100% of the parent
+        backgroundColor: '#f0f0f0',
+        margin: 5,
+        borderRadius: 5,
+        flexDirection: 'row', // Arrange buttons in a row
+        justifyContent: 'space-around',
+         borderWidth: 1,           // 1 pixel border width
+  borderColor: '#808080'
+       // justify: 'center'
+
+      
+        
+    },
+    main4: {
+        height: '8vh',                  // Height is 50 pixels
+        width: '45%',               // Width is 100% of the parent
+        backgroundColor: '#f0f0f0',
+        margin: 5,
+        borderRadius: 5,
+        flexDirection: 'row', // Arrange buttons in a row
+        justifyContent: 'space-around',
+         borderWidth: 1,           // 1 pixel border width
+  borderColor: '#808080'
+        
+    },
+    image: {
+        width: 35,
+        height: 35,
+        borderRadius: 20, 
+        margin:2,
+        marginTop: 8
+       
+     },
+     rideText: {
+        marginTop: 4
+     },
+     map: {
+      width: '100%',
+      height: '99%',
+    },
+  });

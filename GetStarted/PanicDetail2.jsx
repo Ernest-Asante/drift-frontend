@@ -20,7 +20,7 @@ const PanicDetail2 = ({route,navigation}) => {
     useEffect(() => {
         const fetchFirstName = async () => {
           try {
-            const response = await fetch('http://localhost:3001/getfirstname', {
+            const response = await fetch('http://10.20.32.58:3001/getfirstname', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json', 
@@ -52,7 +52,7 @@ const PanicDetail2 = ({route,navigation}) => {
   
       // Send POST request to your backend
       try {
-        const response = await fetch('http://localhost:3001/addpanic', {
+        const response = await fetch('http://10.20.32.58:3001/addpanic', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

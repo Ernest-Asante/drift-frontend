@@ -52,7 +52,7 @@ const D_CreateProfile = ({route,navigation}) => {
       setBlock(null)
       console.log('Submitting Profile:', { identity, contact, firstName, lastName });
       try {
-        const response = await fetch('http://localhost:3001/d_mmotpsend2', {
+        const response = await fetch('http://10.20.32.58:3001/d_mmotpsend2', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json', 
@@ -117,7 +117,7 @@ const D_CreateProfile = ({route,navigation}) => {
       // Send POST request to your backend   
       console.log('Submitting Profile:', { identity, contact, firstName, lastName , dataId});
       try {
-        const response = await fetch('http://localhost:3001/d_mmotpsend3', {
+        const response = await fetch('http://10.20.32.58:3001/d_mmotpsend3', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json', 
@@ -164,7 +164,7 @@ const D_CreateProfile = ({route,navigation}) => {
       // Send POST request to your backend   
       console.log('Submitting Profile:', { identity, contact, firstName, lastName, dataId });
       try {
-        const response = await fetch('http://localhost:3001/d_mmotpsend3', {
+        const response = await fetch('http://10.20.32.58:3001/d_mmotpsend3', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json', 
@@ -210,7 +210,7 @@ const D_CreateProfile = ({route,navigation}) => {
       // Send POST request to your backend   
       console.log('Submitting Profile:', { identity, contact, firstName, lastName });
       try {
-        const response = await fetch('http://localhost:3001/d_mmotpsend3', {
+        const response = await fetch('http://10.20.32.58:3001/d_mmotpsend3', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json', 
@@ -532,7 +532,8 @@ const styles = StyleSheet.create({
     width: '45%', // Each button takes 45% of the width
     height: 50, // Set a fixed height for the buttons
     backgroundColor: '#1e90ff', // Background color for the buttons
-    borderRadius: 6, // Rounded corners
+    borderRadius: 6,
+    margin:10, // Rounded corners
     alignItems: 'center', // Center the text horizontally
     justifyContent: 'center', // Center the text vertically
     marginBottom: 10, // Add margin below the buttons
@@ -560,7 +561,8 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: 'row', // Arrange buttons in a row
-    justifyContent: 'space-between', // Add space between the buttons
+    justifyContent: 'space-between',
+     // Add space between the buttons
   },
     imagePicker: {
         marginTop: 10,

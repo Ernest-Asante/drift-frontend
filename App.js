@@ -5,7 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import GetStarted from './GetStarted/GetStarted';
 import Signup from './GetStarted/Signup';
-import ConfirmOTP from './GetStarted/ConfirmOTP';
+import ConfirmOtp from './GetStarted/ConfirmOtp';
 import CreateProfile from './GetStarted/CreateProfile';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Payment from './GetStarted/Payment';
@@ -42,6 +42,7 @@ export default function App() {
   const [type, setType] = useState('');
   
   async function getData(){
+   
     const data = await AsyncStorage.getItem('key');
     const data2 = await AsyncStorage.getItem('type');
     console.log(data)
@@ -80,7 +81,7 @@ export default function App() {
      
      <Stack.Screen name="GetStarted" options={{ headerShown: false }} component={GetStarted}/>
      <Stack.Screen name="Payment" component={Payment}/>
-     <Stack.Screen name="ConfirmOTP" component={ConfirmOTP}/>
+     <Stack.Screen name="ConfirmOtp" component={ConfirmOtp}/>
      <Stack.Screen name="Signup" component={Signup}/>
      <Stack.Screen name="CreateProfile" component={CreateProfile}/>
      <Stack.Screen name="ConfirmOTP2" component={ConfirmOTP2}/>  
@@ -111,11 +112,11 @@ export default function App() {
      
    </Stack.Navigator>  
    </>):(<>
-    <Stack.Navigator >
+    <Stack.Navigator > 
       
     <Stack.Screen name="GetStarted"  options={{ headerShown: false }}  component={GetStarted}/>
     <Stack.Screen name="Signup" component={Signup}/>
-    <Stack.Screen name="ConfirmOTP" component={ConfirmOTP}/>
+    <Stack.Screen name="ConfirmOtp" component={ConfirmOtp}/>
     <Stack.Screen name="CreateProfile" component={CreateProfile}/>
     <Stack.Screen name="Payment" component={Payment}/>
     <Stack.Screen name="ConfirmOTP2" component={ConfirmOTP2}/>

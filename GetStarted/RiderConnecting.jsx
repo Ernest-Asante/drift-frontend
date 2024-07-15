@@ -12,7 +12,7 @@ const RideStatus = ({route}) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:3001/riderconnect', {
+        const response = await fetch('http://10.20.32.58:3001/riderconnect', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

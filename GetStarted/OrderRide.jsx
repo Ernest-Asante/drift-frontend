@@ -1,5 +1,11 @@
 import { StyleSheet, Text, View, TextInput, TouchableOpacity ,FlatList, Pressable} from 'react-native'
 import React, {useState, useEffect} from 'react'
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import MapView, {Marker} from 'react-native-maps';
+
+import MapViewDirections from 'react-native-maps-directions';
+
 
 export default function OrderRide({navigation, route}) {
   const [pickupLocation, setPickupLocation] = useState('');
@@ -8,17 +14,50 @@ export default function OrderRide({navigation, route}) {
   const [highestRatedDriver, setHighestRatedDriver] = useState(null);
  const { riderId } = route.params;
 
+ const [origin, setOrigin] = useState(null);
+ const [destination, setDestination] = useState(null);
+ const [originName, setOriginName] = useState(null);
+ const [destinationName, setDestinationName] = useState(null);
+ const [zIndexValue1, setZIndexValue1] = useState(2);
+ const [zIndexValue2, setZIndexValue2] = useState(2);
+ const [zIndexValue3, setZIndexValue3] = useState(2);
+
+ const origin1 = {latitude: 6.6695, longitude:-1.5607};
+const destination1 = {latitude: 6.5263, longitude: -1.3043};
+const GOOGLE_MAPS_APIKEY = 'AIzaSyCW7L8qQi78TOlySI6lc5ThzDKvqWmY0b8';
+
+ console.log(riderId)
+
+ const handleOriginPress = (data, details = null) => {
+  setZIndexValue2(0)
+   if (details) {
+     const { lat, lng } = details.geometry.location;
+     setOrigin({ latitude: lat, longitude: lng });
+     setOriginName(details.name)
+   }
+ };  
+
+ const handleDestinationPress = (data, details = null) => {
+   if (details) {
+     const { lat, lng } = details.geometry.location;
+     setDestination({ latitude: lat, longitude: lng });
+     setDestinationName(details.name)
+   }
+ };
+
     const fetchDrivers = async () => {
      
       try {
-        const response = await fetch('http://localhost:3001/my', {
+        const response = await fetch('http://10.20.32.58:3001/my', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           }, 
           body: JSON.stringify({
-            userId:riderId, // Replace with actual user ID
-
+            userId:riderId,
+            latitude: origin.latitude.toFixed(4),
+            longitude:origin.longitude.toFixed(4) , // Replace with actual user ID
+ 
           }), 
         });
 
@@ -57,7 +96,7 @@ export default function OrderRide({navigation, route}) {
 
     const continueOrder = async () => {
       try {
-        const response = await fetch('http://localhost:3001/orderride', {
+        const response = await fetch('http://10.20.32.58:3001/orderride', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -66,8 +105,13 @@ export default function OrderRide({navigation, route}) {
             userId: riderId,
             driverId: highestRatedDriver.driver_id,
             fare: 50,
-            from:pickupLocation,
-            to: dropOff,
+            from:originName,
+            to: destinationName,
+            fromLat: origin.latitude.toFixed(4),
+            fromLong:origin.longitude.toFixed(4) ,
+            toLat: destination.latitude.toFixed(4),
+            toLong: destination.longitude.toFixed(4),
+
             tripId:0// Replace with actual user ID
             
           }), 
@@ -80,7 +124,7 @@ export default function OrderRide({navigation, route}) {
         const data = await response.json(); 
  
         // Assuming the response contains the highest rated driver directly
-        //setHighestRatedDriver(data.highest); 
+        setHighestRatedDriver(data.highest); 
         console.log(data)
         console.log('request sent')
         // If you want to get all nearest drivers and find the highest rated in the client side
@@ -94,88 +138,186 @@ export default function OrderRide({navigation, route}) {
 
    
 
-
+// Effect to update zIndexValue based on data state
+useEffect(() => {
+  if (origin !== null) {
+    setZIndexValue2(9); // Set zIndex to 5 when data is not null
+  } else if(origin == null) {
+    setZIndexValue1(9); // Set zIndex to 9 when data is null
+  } else if(origin && destination){
+    setZIndexValue3(10)
+  }
+}, [origin, destination]);
 
   return ( 
 <>
+{highestRatedDriver ? (
+
+<>
+<View style={styles.container}>
+<MapView style={styles.map} 
+      initialRegion={{
+        latitude: 6.6695,
+        longitude: -1.5607,
+        latitudeDelta: 0.095,
+        longitudeDelta: 0.0421,
+      }}
+      >
+         <MapViewDirections
+      origin={origin1}
+      destination={destination1}
+      apikey={GOOGLE_MAPS_APIKEY}
+       strokeWidth={4}
+    strokeColor="green"
+    />
+    <Marker
+  coordinate={{
+    latitude: 6.6695,
+    longitude: -1.5607,
+  }}/>
+
+
+    <Marker
+  coordinate={{
+    latitude:  6.5263,
+    longitude: -1.3043,
+  }}/>
+      </MapView>
+     
+
+  <View style={styles.driverCard}>
+    <Text style={styles.title}>AVAILABLE RIDE</Text>
+    <Text>Driver ID: {highestRatedDriver.driver_id}</Text>
+    <Text>Driver Name: {highestRatedDriver.driver_name}</Text>
+    <Text>Final Rating: {highestRatedDriver.final_rating}</Text>
+    <Text>Time of Arrival: 5 Miniutes</Text>
+    <TouchableOpacity style={styles.button1} onPress={continueOrder}>
+    <Text style={styles.buttonText}>ORDER</Text>
+   </TouchableOpacity>
+  </View>
+</View>
+
+</>
+
+):(
+
+  <View style={styles.container}>
          <View>
            <Text style={styles.textlabel1}>Enter pick-up location: </Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter your pick-up location" 
-            keyboardType="text" 
-            value={pickupLocation}
-            onChangeText={(value) => setPickupLocation(value)}  // Ensures the numeric keypad with phone number symbols
-          />
+       
           </View>
-
-          <View>
-           <Text style={styles.textlabel2}>Enter drop-off location: </Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter your drop-off location" 
-            keyboardType="text" 
-            value={dropOff}
-            onChangeText={(value) => setDropoff(value)}  // Ensures the numeric keypad with phone number symbols
+       
+          <View
+          style={{
+           height: "100%",
+           width: "100%",
+            paddingTop: 22,
+            paddingHorizontal: 26,
+            position: "absolute",
+          zIndex: zIndexValue1
+         // zIndex:2
+          }}
+         >
+          <GooglePlacesAutocomplete
+            placeholder='Search'
+            minLength={2}
+            onPress={handleOriginPress}
+            query={{
+              key: 'AIzaSyCW7L8qQi78TOlySI6lc5ThzDKvqWmY0b8',
+              language: 'en',
+            }}
+            fetchDetails={true}
+            styles={{
+              textInputContainer: {
+                backgroundColor: '#FFFFFF',
+                borderTopWidth: 0,
+                borderBottomWidth: 0,
+                borderColor: '#CCCCCC',
+                paddingHorizontal: 10,
+                top:10,
+                marginBottom:30,
+              //  zIndex:2
+              },
+              textInput: {
+                marginLeft: 0,
+                marginRight: 0,
+                height: 38,
+                color: '#5d5d5d',
+                fontSize: 16,
+              },
+            }}
+          
           />
-          </View>
+        </View>
+        <View
+          style={{
+             flex: 1,
+            height: "90%",
+           width: "100%",
+          paddingTop: 32,
+           paddingHorizontal: 26,
+          position: "absolute",
+           zIndex: zIndexValue2
+       //  zIndex: 2
+          }}
+        >
+        <Text style={styles.textlabel2}>Enter drop-off location: </Text>
+          <GooglePlacesAutocomplete
+            placeholder='Search'
+            minLength={2}
+            onPress={handleDestinationPress}
+            query={{
+              key: 'AIzaSyCW7L8qQi78TOlySI6lc5ThzDKvqWmY0b8',
+              language: 'en',
+            }}
+            fetchDetails={true}
+            styles={{
+              textInputContainer: {
+                backgroundColor: '#FFFFFF',
+                borderTopWidth: 0,
+                borderBottomWidth: 0,
+                borderColor: '#CCCCCC',
+                paddingHorizontal: 10,
+                marginTop:70,
+              //  zIndex:9
+              },
+              textInput: {
+                marginLeft: 0,
+                marginRight: 0,
+                height: 38,
+                color: '#5d5d5d',
+                fontSize: 16,
+              },
+            }}
+          />
+        
+        </View>
+  
           <View>
           <TouchableOpacity style={styles.button}  onPress={fetchDrivers}>
-          <Text style={styles.buttonText}>Continue</Text> 
+          <Text style={styles.buttonText}>CONTINUE</Text> 
          </TouchableOpacity>
           </View>
 
-         
-
-         <Pressable style={styles.button} onPress={() => navigation.navigate('RideStatus', { riderId: riderId })}>
-          <Text style={styles.buttonText}>Ride Status</Text>
-         </Pressable> 
-
-          <View style={styles.container}>
-      {highestRatedDriver ? (
-        <>
-        <View style={styles.driverCard}>
-          <Text style={styles.title}>Driver with Highest Rating</Text>
-          <Text>Driver ID: {highestRatedDriver.driver_id}</Text>
-          <Text>Driver Name: {highestRatedDriver.driver_name}</Text>
-          <Text>Final Rating: {highestRatedDriver.final_rating}</Text>
-          <TouchableOpacity style={styles.button} onPress={continueOrder}>
-          <Text style={styles.buttonText}>ORDER</Text>
-         </TouchableOpacity>
-        </View>
-      
-
-     <FlatList
-        data={drivers}
-        keyExtractor={(item) => item.driver_id.toString()}
-        renderItem={({ item }) => (
-          <View style={styles.driverCard}>
-            <Text>Driver ID: {item.driver_id}</Text>
-            <Text>Driver Name: {item.driver_name}</Text>
-            <Text>Final Rating: {item.final_rating}</Text>
-          </View>
-        )}
-      /> 
+      </View>)}
       </>
-      ):(<Text>Loading...</Text>)
-}
-    </View>
-      
-  
-</>
-    
   )
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex:1,
+  
+    paddingHorizontal: 2,
+  },
   textlabel1: {
-    fontSize: "15px",
+    fontSize: 15,
     margin: "1px"
   },
   textlabel2: {
-    fontSize: "15px",
-    margin: "1px",
-    marginTop:10
+    fontSize: 15,
+   top:60,
+    marginLeft:5
   },
   input: {
   height: 30,
@@ -188,13 +330,30 @@ const styles = StyleSheet.create({
    // Sets the background color to grey
   },
   button: {
-    width: 200,
+    width: "70%",
     padding: 5,
     backgroundColor: '#1e90ff',
     borderRadius: 6,
     height: 50,
-    bottom: 1,
-    margin: 5
+    top: 400,
+    marginLeft:"15%",
+    margin: 5,
+    zIndex: 10
+  },
+  map: {
+    width: '100%',
+    height: '69%',
+  },
+button1: {
+  width: "70%",
+  padding: 5,
+  backgroundColor: '#1e90ff',
+  borderRadius: 6,
+  height: 40,
+  top: 5,
+  marginLeft:"15%",
+  margin: 5,
+  zIndex: 10
 },
 buttonText: {
     color: '#fff',
@@ -202,18 +361,15 @@ buttonText: {
     fontWeight: 'bold',
     textAlign: "center"
 },
-container: {
-  flex: 1,
-  padding: 16,
-  backgroundColor: '#fff',
-},
+
 driverCard: {
-  padding: 16,
-  marginVertical: 8,
+  padding: 8,
+  marginVertical: 4,
   backgroundColor: '#f9f9f9',
   borderRadius: 8,
   shadowColor: '#000',
   shadowOpacity: 0.1,
+  //top: "72%",
   shadowRadius: 4,
   shadowOffset: { width: 0, height: 2 },
 },

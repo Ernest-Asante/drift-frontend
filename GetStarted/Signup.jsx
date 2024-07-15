@@ -5,6 +5,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 
 
+
 const Signup = ({navigation}) => {
  
   const [identity, setIdentity] = useState('');
@@ -12,13 +13,13 @@ const Signup = ({navigation}) => {
   // Local state to manage input
 
   const handleOTPSubmit = async () => {
-    // Validate emailInput if needed
+    // Validate emailInput if needed 
    // const combinedOtp = otp.join('');
    // console.log('Combined OTP:', combinedOtp);
 
     // Send POST request to your backend
     try {
-      const response = await fetch('http://localhost:3001/mmotpsend', {
+      const response = await fetch('http://10.20.32.58:3001/mmotpsend', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -36,8 +37,9 @@ const Signup = ({navigation}) => {
       // Navigate to next screen (ConfirmOTP or wherever needed)
       if (data.message === 'OTP sent successfully') {
         console.log('Email added successfully:', data.message);
-        // Navigate to next screen (ConfirmOTP or wherever needed)
-        navigation.navigate('ConfirmOTP', { identity });
+        console.log(identity)
+        console.log(navigation)
+        navigation.navigate('ConfirmOtp', { identity });
       } else { 
         console.error('Failed to send OTP:', data.message);
         // Show an alert or other notification to the user
@@ -57,7 +59,7 @@ const Signup = ({navigation}) => {
     <StatusBar style="auto" />
     <View style={styles.container}>
         <View style={styles.titlebody}>
-         <Text style={styles.title}>Drift - ha </Text>
+         <Text style={styles.title}>Drift  </Text>
         </View>
 
         <View>
@@ -133,12 +135,13 @@ const styles = StyleSheet.create({
     width: '80%',
     padding: 15,
     backgroundColor: '#fff',
-    borderRadius: 6,
+    borderRadius: 8,
     alignItems: 'center',
     justifyContent: "center",
     marginTop: 15,
     marginLeft: 30,
-    border:  '1px solid blue'
+    borderColor:  '#1e90ff',
+    borderWidth: 1,
    
     
   },

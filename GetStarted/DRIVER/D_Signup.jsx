@@ -18,7 +18,7 @@ const D_Signup = ({navigation}) => {
 
     // Send POST request to your backend
     try {
-      const response = await fetch('http://localhost:3001/d_mmotpsend', {
+      const response = await fetch('http://10.20.32.58:3001/d_mmotpsend', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -138,7 +138,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginTop: 15,
     marginLeft: 30,
-    border:  '1px solid blue'
+   // border:  '1px solid blue',
+    borderColor:  '#1e90ff',
+    borderWidth: 1,
    
     
   },

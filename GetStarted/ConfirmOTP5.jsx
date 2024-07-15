@@ -49,7 +49,7 @@ function ConfirmOTP5({route, navigation}){
   
       // Send POST request to your backend
       try {
-        const response = await fetch('http://localhost:3001/otpresend2', {
+        const response = await fetch('http://10.20.32.58:3001/otpresend2', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -90,7 +90,7 @@ function ConfirmOTP5({route, navigation}){
         const combinedOtp = otp.join('');
         console.log('Combined OTP:', combinedOtp); 
   
-        const response = await fetch('http://localhost:3001/mmverifyotp4', {
+        const response = await fetch('http://10.20.32.58:3001/mmverifyotp4', {
           method: 'POST',
           headers: {  
             'Content-Type': 'application/json',
@@ -123,6 +123,7 @@ function ConfirmOTP5({route, navigation}){
         console.log('OTP verified') 
         AsyncStorage.setItem('key', "verified");
         AsyncStorage.setItem('id', contact)
+        AsyncStorage.setItem('type', "rider");
         navigation.navigate('HomeScreen', { identity:contact }); 
       
       }  else if(data.error === 'Unexpected error'){
@@ -191,116 +192,118 @@ function ConfirmOTP5({route, navigation}){
 export default ConfirmOTP5
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-    },
-    titlebody: {
-        height: 50,                  // Height is 50 pixels
-        width: '100%',               // Width is 100% of the parent
-        backgroundColor: '#1e90ff',     // Background color is blue
-        justifyContent: 'center',    // Vertically center the text inside the container
-        alignItems: 'left' 
-    },
-    title: {
-        color: 'white',              // Text color is white
-        fontSize: 25,
-        marginLeft: "8px"  
-    },
-    textlabel: {
-        fontSize: "25px",
-        margin: "3Spx"
-    },
-    input: {
-        width: 40,
-        height: 40,
-        borderBottomWidth: 2,
-        borderColor: 'gray',
-        borderWidth: 1,  
-        borderRadius: 5,
-        fontSize: 18,
-        backgroundColor: '#f2f2f2' ,
-        paddingLeft: 10,
-        paddingRight: 10,
-        textAlign: 'center',
-      },
-      inputstyle: {
-        flexDirection: 'row', // This will lay out the children (input boxes) horizontally.
-        justifyContent: 'space-around',
-        padding: 20,
-        
-      },
-    tip: {
-        fontSize:"10px",
-        margin: "3px"
-    },
-    row: {
-      flexDirection: 'row', // Items will be laid out horizontally
-      justifyContent: 'space-between', // Adjust as needed (e.g., space-between)
-      marginTop:"20px"
-    },
-    resendotpbutton: {
-      width: 100,
-      height: 40,
-      padding: 5,
-      backgroundColor: '#1e90ff',
-      borderRadius: 6,
-      alignItems: 'center',
-      justifyContent: "center",
-      margin: 5
-     
-     
-      
-    },
-    buttonText: {
-      color: '#fff',
-      fontSize: 18,
-      fontWeight: 'bold',
-    },
-    resendotp: {
-     
-      fontSize: "20px",
-      marginLeft: "1%"
-      
-    },
-    buttonContinue: {
-      width: '70%',
-      padding: 15,
-      backgroundColor: '#1e90ff',
-      borderRadius: 6,
-      alignItems: 'center',
-      justifyContent: "space-between",
-      position: 'absolute',
-      bottom: 20,
-      marginLeft: "10%"
-     
-     
-      
-    },
-    buttonTextContinue: {
-      color: '#fff',
-      fontSize: 18,
-      fontWeight: 'bold',
-    },
-  timer: {
-    fontSize: 12
+  container: {
+    flex: 1,
   },
-  
-    otp:{
-      left:50,
-      width: 200,
-      height: 40,
-      padding: 5,
-      backgroundColor: '#1e90ff',
-      borderRadius: 6,
-      alignItems: 'center',
-      justifyContent: "center",
+  titlebody: {
+      height: 50,                  // Height is 50 pixels
+      width: '100%',               // Width is 100% of the parent
+      backgroundColor: '#1e90ff',     // Background color is blue
+      justifyContent: 'center',    // Vertically center the text inside the container
+      alignItems: 'left' 
+  },
+  title: {
+      color: 'white',              // Text color is white
+      fontSize: 25,
       margin: 5
-     
-     
+  },
+  textlabel: {
+      fontSize: 25,
+      margin: 5
+  },
+  input: {
+      width: 40,
+      height: 40,
+      borderBottomWidth: 2,
+      borderColor: 'gray',
+      borderWidth: 1,  
+      borderRadius: 5,
+      fontSize: 18,
+      backgroundColor: '#f2f2f2' ,
+      paddingLeft: 10,
+      paddingRight: 10,
+      textAlign: 'center',
     },
-    otptext:{
-      fontSize: 20
-    }
-  
+    inputstyle: {
+      flexDirection: 'row', // This will lay out the children (input boxes) horizontally.
+      justifyContent: 'space-around',
+      padding: 20,
+      
+    },
+  tip: {
+      fontSize:15,
+      margin: "3px",
+      top:2,
+  },
+  row: {
+    flexDirection: 'row', // Items will be laid out horizontally
+    justifyContent: 'space-between', // Adjust as needed (e.g., space-between)
+    top:90
+  },
+  resendotpbutton: {
+    width: 100,
+    height: 40,
+    padding: 4,
+    backgroundColor: '#1e90ff',
+    borderRadius: 6,
+    alignItems: 'center',
+    justifyContent: "center",
+    top:30
+   
+   
+    
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+    top:1
+  },
+  resendotp: {
+   
+    fontSize: 23,
+    margin: 3,
+    top:30
+  },
+  buttonContinue: {
+    width: '70%',
+    padding: 15,
+    backgroundColor: '#1e90ff',
+    borderRadius: 6,
+    alignItems: 'center',
+    justifyContent: "space-between",
+    position: 'fixed',
+    marginTop:80,
+    marginLeft:"15%"
+   
+   
+    
+  },
+  buttonTextContinue: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+timer: {
+  fontSize: 12
+},
+
+  otp:{
+    left:"10%",
+    width: "80%",
+    height: 45,
+    padding: 5,
+    backgroundColor: 'red',
+    borderRadius: 6,
+    alignItems: 'center',
+    justifyContent: "center",
+    margin: 5,
+    top:15
+   
+   
+  },
+  otptext:{
+    fontSize: 20
+  }
      
 })

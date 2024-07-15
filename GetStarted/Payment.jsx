@@ -56,7 +56,7 @@ function Payment({route,navigation}){
 
     // Send POST request to your backend
     try {
-      const response = await fetch('http://localhost:3001/getprofile', {
+      const response = await fetch('http://10.20.32.58:3001/getprofile', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
