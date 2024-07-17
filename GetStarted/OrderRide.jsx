@@ -112,21 +112,24 @@ const GOOGLE_MAPS_APIKEY = 'AIzaSyCW7L8qQi78TOlySI6lc5ThzDKvqWmY0b8';
             toLat: destination.latitude.toFixed(4),
             toLong: destination.longitude.toFixed(4),
 
-            tripId:0// Replace with actual user ID
+            //tripId:0// Replace with actual user ID
             
           }), 
         });
 
         if (!response.ok) { 
           throw new Error('Network response was not ok'); 
+        } else{
+             navigation.navigate('RideStatus', {riderId: riderId})
         }
 
         const data = await response.json(); 
  
-        // Assuming the response contains the highest rated driver directly
-        setHighestRatedDriver(data.highest); 
         console.log(data)
-        console.log('request sent')
+        // Assuming the response contains the highest rated driver directly
+       // setHighestRatedDriver(data.highest); 
+      //  console.log(data)
+        //console.log('request sent')
         // If you want to get all nearest drivers and find the highest rated in the client side
          //const { nearest_drivers } = data;
         

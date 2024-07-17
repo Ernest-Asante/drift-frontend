@@ -15,11 +15,12 @@ const LoadHome = ({navigation}) => {
        // console.log(isLoggedIn)
         setData2(data2)
         setData(data)
-        console.log(data)
+        console.log(data) 
         setLoading(false) 
 
-        if(data2 && data == 'rider'){
-            navigation.navigate('HomeScreen', { identity:data2 });
+        if(data2 && data == 'rider'){ 
+           navigation.navigate('HomeScreen', { identity:data2 });
+   //   navigation.navigate
           } else if(data2 && data == 'driver'){
             navigation.navigate('HomeScreenD', { identity:data2 });
           }

@@ -3,6 +3,9 @@ import React,{useEffect, useState} from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'; 
 import MapView, {Marker} from 'react-native-maps';
 import * as Location from 'expo-location';
+import { FontAwesome } from '@expo/vector-icons';
+//import MyDrawer from '../Drawer';
+//import { Root } from '../App';
 
 
 const getstarted = require('../assets/getstarted.jpeg');
@@ -19,6 +22,13 @@ const HomeScreen = ({route,navigation}) => {
   const { identity } = route.params;
   console.log(identity)
 
+  const openProfile = () => {
+    navigation.navigate('Profile');
+  };
+
+  const openDrift = () => {
+    navigation.navigate('Drift');
+  };
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -137,10 +147,7 @@ const HomeScreen = ({route,navigation}) => {
   return (
     <View style={styles.container}>
    
-     
-      <TouchableOpacity style={styles.button} onPress={signOut}>
-          <Text style={styles.buttonText}>Signout</Text>
-        </TouchableOpacity> 
+   
       
      <View style={styles.container}>
      
@@ -180,6 +187,27 @@ const HomeScreen = ({route,navigation}) => {
      }
 
       </MapView> 
+      
+     <View style={styles.toggleContainer}>
+        <TouchableOpacity
+        // style={styles.drift}
+          onPress={openDrift}
+        >
+          <Text  style={styles.drift}>DRIFT</Text>
+        </TouchableOpacity>
+     </View>
+
+     <View style={styles.toggleContainer2}>
+        <TouchableOpacity
+          style={styles.toggleButton}
+          onPress={openProfile}
+        >
+          <FontAwesome name="bars" size={24} color="black" />
+        </TouchableOpacity>
+     </View>
+      
+  
+
      </View>
 
       <View style={styles.main}>
@@ -292,8 +320,47 @@ const styles = StyleSheet.create({
      rideText: {
         marginTop: 4
      },
+     toggleContainer: {
+      position: 'absolute',
+      top: 30,
+      left: 20,
+      zIndex: 1,
+      backgroundColor: 'white',
+      borderRadius: 50,
+      elevation: 5,
+      padding: 5,
+      width: 120,
+      height:45
+    },
+    toggleContainer2: {
+      position: 'absolute',
+      top: 30,
+      left: "80%",
+      zIndex: 1,
+      backgroundColor: 'white',
+      borderRadius: 50,
+      elevation: 5,
+      padding: 10,
+    },
+    toggleButton: {
+      width: 30,
+      height: 30,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    rowContainer: {
+    //  flexDirection: 'row',
+     // justifyContent: 'space-between',
+     // marginBottom: 20,
+    },
+    drift:{
+     fontWeight:"bold",
+      fontSize:25,
+      textAlign: "center"
+    },
      map: {
       width: '100%',
       height: '99%',
+
     },
   });

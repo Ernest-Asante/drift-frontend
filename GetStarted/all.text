@@ -56,3 +56,26 @@
       <Pressable style={styles.buttonApple} onPress={() => navigation.navigate('HomeScreen')}>
           <Text style={styles.buttonTextApple}>CONTINUE WITH APPLE</Text>
       </Pressable> 
+
+
+
+
+      
+     {
+      carList.map((car)=>{
+        return(
+          <Marker
+          key={car.id}
+          coordinate={{latitude:car.latitude, longitude:car.longitude}}
+          title={car.title}
+          image={{uri: carr}}
+          >
+              <Image
+              source={{ uri:carr }}
+              style={{ width: 32, height: 32 }} // Adjust size as needed
+            />
+          </Marker>
+        )
+
+      })
+     }

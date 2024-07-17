@@ -1,4 +1,6 @@
 import React, {useEffect, useState} from'react'
+// Only import react-native-gesture-handler on native platforms
+import 'react-native-gesture-handler';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View , TouchableOpacity, ActivityIndicator} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
@@ -33,10 +35,21 @@ import D_CreateProfile from './GetStarted/DRIVER/D_CreateProfile';
 import D_CarDetail from './GetStarted/DRIVER/D_CreateCarProfile1';
 import D_CarDetail2 from './GetStarted/DRIVER/D_CreateCarProfile2';
 import LoadHome from './GetStarted/LoadHome';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import MyDrawer from './Drawer';
+import Profile from './GetStarted/Profile';
+import Drift from './GetStarted/Drift';
+import Transactions from './GetStarted/Transactions';
 
 const Stack = createNativeStackNavigator();
 
+
+const Drawer = createDrawerNavigator();
+
 window.AsyncStorage = AsyncStorage;
+
+
+
 export default function App() { 
   const [isLoggedIn, setIsLoggedIn] = useState('');
   const [type, setType] = useState('');
@@ -74,15 +87,18 @@ export default function App() {
     {isLoggedIn === "verified"?( 
     <> 
      <Stack.Navigator >  
-      
+    
     
       <Stack.Screen name="LoadHome"  options={{ headerShown: false }}  component={LoadHome} />
  
-     
+       
      <Stack.Screen name="GetStarted" options={{ headerShown: false }} component={GetStarted}/>
      <Stack.Screen name="Payment" component={Payment}/>
+     <Stack.Screen name="Profile" component={Profile}/>
+     <Stack.Screen name="Transactions" component={Transactions}/>
      <Stack.Screen name="ConfirmOtp" component={ConfirmOtp}/>
      <Stack.Screen name="Signup" component={Signup}/>
+     < Stack.Screen name="Drift" component={Drift}/>
      <Stack.Screen name="CreateProfile" component={CreateProfile}/>
      <Stack.Screen name="ConfirmOTP2" component={ConfirmOTP2}/>  
      <Stack.Screen name="ConfirmOTP3" component={ConfirmOTP3}/>  
@@ -104,18 +120,23 @@ export default function App() {
     <Stack.Screen name="ConfirmOTP3D" component={D_ConfirmOTP3}/>
     <Stack.Screen name="ConfirmOTP4D" component={D_ConfirmOTP4}/>
     <Stack.Screen name="ConfirmOTP5D" component={D_ConfirmOTP5}/>
-    <Stack.Screen name="HomeScreenD" component={D_HomeScreen}/> 
+    <Stack.Screen name="HomeScreenD" options={{ headerShown: false }} component={D_HomeScreen}/> 
     <Stack.Screen name="DriverRequestD" component={D_DriverRequest}/>
     <Stack.Screen name="DriverProfile" component={D_CreateProfile}/>
     <Stack.Screen name="CarDetail" component={D_CarDetail}/>
     <Stack.Screen name="CarDetail2" component={D_CarDetail2}/>
      
    </Stack.Navigator>  
+
    </>):(<>
     <Stack.Navigator > 
+  
       
     <Stack.Screen name="GetStarted"  options={{ headerShown: false }}  component={GetStarted}/>
     <Stack.Screen name="Signup" component={Signup}/>
+    <Stack.Screen name="Profile" component={Profile}/>
+    <Stack.Screen name="Transactions" component={Transactions}/>
+   < Stack.Screen name="Drift" component={Drift}/>
     <Stack.Screen name="ConfirmOtp" component={ConfirmOtp}/>
     <Stack.Screen name="CreateProfile" component={CreateProfile}/>
     <Stack.Screen name="Payment" component={Payment}/>
@@ -138,13 +159,14 @@ export default function App() {
     <Stack.Screen name="ConfirmOTP3D" component={D_ConfirmOTP3}/>
     <Stack.Screen name="ConfirmOTP4D" component={D_ConfirmOTP4}/>
     <Stack.Screen name="ConfirmOTP5D" component={D_ConfirmOTP5}/>
-    <Stack.Screen name="HomeScreenD" component={D_HomeScreen}/>
+    <Stack.Screen name="HomeScreenD" options={{ headerShown: false }} component={D_HomeScreen}/>
     <Stack.Screen name="DriverRequestD" component={D_DriverRequest}/>
     <Stack.Screen name="DriverProfile" component={D_CreateProfile}/>
     <Stack.Screen name="CarDetail" component={D_CarDetail}/>
     <Stack.Screen name="CarDetail2" component={D_CarDetail2}/>
     
   </Stack.Navigator>
+  
   </>)
     }
      
