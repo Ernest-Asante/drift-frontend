@@ -22,7 +22,7 @@ const D_CarDetail = ({route,navigation}) => {
     useEffect(() => {
         const fetchFirstName = async () => {
           try {
-            const response = await fetch('http://10.20.32.58:3001/d_getfirstname', {
+            const response = await fetch('http://10.20.32.44:3001/d_getfirstname', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json', 
@@ -55,7 +55,7 @@ const D_CarDetail = ({route,navigation}) => {
   
       // Send POST request to your backend
       try {
-        const response = await fetch('http://10.20.32.58:3001/d_addcardetails', {
+        const response = await fetch('http://10.20.32.44:3001/d_addcardetails', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

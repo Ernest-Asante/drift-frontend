@@ -6,6 +6,11 @@ import MapViewDirections from 'react-native-maps-directions';
 import RadioGroup from 'react-native-radio-buttons-group';
 import Modal from "react-native-modal";
 
+import { createClient } from '@supabase/supabase-js';
+
+
+const supabase = createClient('https://ykvtwisrbzpkzejkposo.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlrdnR3aXNyYnpwa3plamtwb3NvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTgxNTk1NzcsImV4cCI6MjAzMzczNTU3N30.b1fqoxTiOYOVRTlnWwcSJTB-AWxCpfJudXnGRx_v_Lk')
+
 const RideStatus = ({route}) => {
   const [rideAvailable, setRideAvailable] = useState(false);
   const [pollingTimer, setPollingTimer] = useState(null);
@@ -54,10 +59,71 @@ const toggleModal = () => {
  const GOOGLE_MAPS_APIKEY = 'AIzaSyCW7L8qQi78TOlySI6lc5ThzDKvqWmY0b8';
 
 
+ useEffect(()=>{
+
+  //  const clientValue = identity;  // Replace with the client-supplied value
+  //  const column = 'body';   
+    const channel = supabase
+     .channel('public:rider')
+     .on(  
+      'postgres_changes',
+      {
+        event: 'UPDATE',
+        schema: 'public',
+        table: 'rider',
+        filter: `id=eq.${riderId}`
+      },
+      (payload) => {
+        console.log(payload)
+        const newRideAvailable = payload.new.ongoing_ride;
+       /* setModel(payload.new.car_model)
+        setColor(payload.new.car_colour)
+        setPlate(payload.new.car_plate)
+        setDriverId(payload.new.ride_request.driverId)
+        setUserId(payload.new.ride_request.riderId)
+        setFare(payload.new.ride_request.fare) */
+      //  console.log(payload)
+        if(newRideAvailable !== false) {
+          setRideAvailable(newRideAvailable);
+          setLoading(false)
+          clearInterval(timeInterval)
+        /*  setModel(payload.new.car_model)
+        setColor(payload.new.car_colour)
+        setPlate(payload.new.car_plate)
+        setDriverId(payload.new.ride_request.driverId)
+        setUserId(payload.new.ride_request.riderId)
+        setFare(payload.new.ride_request.fare) */
+          console.log(payload)
+        
+          
+        }
+      }
+     )
+     .subscribe();
+
+     const interval = setInterval(()=>{
+      setTimeElapsed(prevTime => prevTime + 1);
+     }, 1000);
+     setTimeInterval(interval)
+
+     return () => {
+      supabase.removeChannel(channel);
+      clearInterval()
+
+     }
+  }, [rideAvailable]);
+
   useEffect(() => {
+    if(timeElapsed >= 60){
+      clearInterval(timeInterval);
+      setLoading(false)
+    }
+  }, [timeElapsed])
+
+  /*useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://10.20.32.58:3001/riderconnect', {
+        const response = await fetch('http://10.20.32.44:3001/riderconnect', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -126,11 +192,20 @@ const toggleModal = () => {
       console.log('No ride available after 60 seconds');
       // Update UI or show alert to user
     }
-  }, [timeElapsed]);
+  }, [timeElapsed]); */
+
+  if(loading){
+    return(
+      <>
+      <ActivityIndicator size="large" color="#0000ff" /> 
+      <View><Text>Loading</Text></View>
+      </>
+    )
+  }
      
   return (
   <>
-      {rideAvailable !== null ? (
+      {rideAvailable !== false ? (
         
           <>
           <View style={styles.container}>
@@ -207,9 +282,6 @@ const toggleModal = () => {
           
           </>
           
-      ) :loading?(
-        <ActivityIndicator size="large" color="#0000ff" /> // Show loading indicator
-      
       ):(<Text>NO AVAILABLE DRIVER. TRY AGAIN</Text>)}
     </>
   );
@@ -248,7 +320,7 @@ const styles = StyleSheet.create({
   },
   map: {
     width: '100%',
-    height: '75%',
+    height: '77%',
   },
   centeredView: {
     flex: 1,

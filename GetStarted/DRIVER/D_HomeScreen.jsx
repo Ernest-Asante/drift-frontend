@@ -6,20 +6,26 @@ import * as Location from 'expo-location';
 import { FontAwesome } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import Modal from "react-native-modal";
+import { createClient } from '@supabase/supabase-js';
 
 
+const supabase = createClient('https://ykvtwisrbzpkzejkposo.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlrdnR3aXNyYnpwa3plamtwb3NvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTgxNTk1NzcsImV4cCI6MjAzMzczNTU3N30.b1fqoxTiOYOVRTlnWwcSJTB-AWxCpfJudXnGRx_v_Lk')
 
 const getstarted = require('../../assets/getstarted.jpeg');
 
 const carr = require('../../assets/carr.jpg');
 
 
+
+
 const D_HomeScreen = ({route,navigation}) => {
-  const [dataId, setDataId] = useState('');
-  const [data, setData] = useState(false);
+  const [userId, setUserId] = useState('');
+  const [driverId, setDriverId] = useState('');
   const [model, setModel] = useState('');
   const [color, setColor] = useState('');
   const [plate, setPlate] = useState('');
+  const [fare, setFare] = useState(0);
+  const [tripId, setTripId] = useState(0);
  const [acceptData, setAcceptData] = useState('');
  const [rejectData, setRejectData] = useState('');
   const [data1, setData1] = useState('');
@@ -35,9 +41,17 @@ const D_HomeScreen = ({route,navigation}) => {
  // const [loading, setLoading] = useState(true); // Initially set to true to show loading indicator
   const [timeInterval, setTimeInterval] = useState(null);
   const [isModalVisible, setModalVisible] = useState(false);
+
+  const [isRideAvailable, setIsRideAvailable] = useState(false);
 //  const [carList, setCarList] = useState(null);
+
+
   const { identity } = route.params;
   console.log(identity)  
+
+  const column = identity.includes('@') ? 'email' : 'phone';
+ // let inverseColumn = identity.includes('@') ? 'phone' : 'email';
+console.log(column)
 
   const openProfile = () => {
     navigation.navigate('Profile');
@@ -120,101 +134,76 @@ const D_HomeScreen = ({route,navigation}) => {
     },
   ]);
   
+  //const driverId = 22;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('http://10.20.32.58:3001/riderequest', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            }, 
-            body: JSON.stringify({
-              identity:identity,
-             
-              
-            })
-        })
+  useEffect(()=>{
 
-        if (!response.ok) {
-          throw new Error('Failed to fetch ride availability');
+  //  const clientValue = identity;  // Replace with the client-supplied value
+  //  const column = 'body';   
+    const channel = supabase
+     .channel('public:driver')
+     .on(  
+      'postgres_changes',
+      {
+        event: 'UPDATE',
+        schema: 'public',
+        table: 'driver',
+        filter: `${column}=eq.${identity}`
+      },
+      (payload) => {
+        console.log(payload)
+        const newIsRideAvailable = payload.new.request;
+        setModel(payload.new.car_model)
+        setColor(payload.new.car_colour)
+        setPlate(payload.new.car_plate)
+        setDriverId(payload.new.ride_request.driverId)
+        setUserId(payload.new.ride_request.riderId)
+        setFare(payload.new.ride_request.fare)
+      //  console.log(payload)
+        if(newIsRideAvailable !== false) {
+          setIsRideAvailable(newIsRideAvailable);
+          setModel(payload.new.car_model)
+        setColor(payload.new.car_colour)
+        setPlate(payload.new.car_plate)
+        setDriverId(payload.new.ride_request.driverId)
+        setUserId(payload.new.ride_request.riderId)
+        setFare(payload.new.ride_request.fare)
+          console.log(payload)
+          setModalVisible(true)
+          console.log(isRideAvailable)
+          console.log(model)
+          console.log(color)
+          
         }
- 
-        const data = await response.json();
-      //  console.log('Ride availability:', data); 
-      //  setRideAvailable(data.request);
-          setData1(data[0])
-        console.log(data[0].request)
-        console.log(data[0].ride_request)
-    
-      //  console.log(rideAvailable)
-
-        // If ride is not available, start polling every 5 seconds
-        setRideAvailable(data[0].request);
-        setModalVisible(data[0].request)
-        setData(data[0].ride_request)
-        setModel(data[0].car_model)
-        setColor(data[0].car_color)
-        setPlate(data[0].car_plate)
-            console.log(rideAvailable)
-
-        // If ride is available, stop polling and clear timers
-        if (data.request === true) {
-        //  setLoading(false); // Hide loading indicator
-          clearInterval(pollingTimer); // Stop polling
-          clearInterval(timeInterval); // Stop 60-second timer
-        }
-      } catch (error) {
-        console.error('Error fetching ride availability:', error.message);
       }
-    };
+     )
+     .subscribe();
 
-    // Start polling
-    fetchData();
-    const timer = setInterval(fetchData, 10000); // Poll every 10 seconds
-    setPollingTimer(timer);
+     return () => {
+      supabase.removeChannel(channel);
 
-    // Start 60-second timer
-    const interval = setInterval(() => {
-      setTimeElapsed(prevTime => prevTime + 1);
-    }, 1000); // Increment timeElapsed every second
-    setTimeInterval(interval);
-
-    // Clean up timers on unmount
-    return () => {
-      clearInterval(timer);
-      clearInterval(interval);
-    };
-  }, []);
-
-  // Check after 60 seconds if ride is still not available
-  useEffect(() => {
-    if (timeElapsed >= 60) {
-      clearInterval(pollingTimer); // Stop polling
-      clearInterval(timeInterval); // Stop 60-second timer
-     // setLoading(false); // Hide loading indicator
-      console.log('No ride available after 60 seconds');
-      // Update UI or show alert to user
-    }
-  }, [timeElapsed]);
-     
-
+     }
+  }, [isRideAvailable])
+  console.log(model)
+  console.log(color)
+          
+  
   const acceptRide = async () => {
     try {
-      const response = await fetch('http://10.20.32.58:3001/acceptride', {
+      const response = await fetch('http://10.20.32.44:3001/acceptride', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         }, 
         body: JSON.stringify({
-          userId:data.riderId,
-          driverId:data.driverId,
-           fare: data.fare,
+          userId: userId,
+          driverId: driverId,
+           fare:fare,
            // time:" 4 minutes",
             model: model, 
             color: color,
             plate: plate,
-            tripId: data.tripId,
+           
             
           // Replace with actual user ID
           
@@ -228,7 +217,7 @@ const D_HomeScreen = ({route,navigation}) => {
       const data = await response.json(); 
 
       // Assuming the response contains the highest rated driver directly
-      setAcceptData(data); 
+      setAccept(true); 
       setModalVisible(false)
       
 
@@ -244,14 +233,14 @@ const D_HomeScreen = ({route,navigation}) => {
 
   const rejectRide = async () => {
     try {
-      const response = await fetch('http://10.20.32.58:3001/rejectride', {
+      const response = await fetch('http://10.20.32.44:3001/rejectride', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         }, 
         body: JSON.stringify({
-          userId:data.riderId,
-          driverId: data.driverId// Replace with actual user ID
+          userId:userId,
+          driverId:driverId// Replace with actual user ID
           
         }), 
       }); 
@@ -329,7 +318,7 @@ const D_HomeScreen = ({route,navigation}) => {
    
       <>
 
-      {accept == true? ( 
+      {accept? ( 
 <>
 
 <View style={styles.container}>
@@ -491,10 +480,10 @@ const D_HomeScreen = ({route,navigation}) => {
          
 
         <View  style={styles.buttonContainerM}>
-             <TouchableOpacity style={styles.buttonM1} onPress={''}>
+             <TouchableOpacity style={styles.buttonM1} onPress={acceptRide}>
              <Text style={styles.buttonTextM1}> ACCEPT</Text>
              </TouchableOpacity>
-             <TouchableOpacity style={styles.buttonM2} onPress={''}>
+             <TouchableOpacity style={styles.buttonM2} onPress={rejectRide}>
              <Text style={styles.buttonTextM2}>REJECT</Text>
              </TouchableOpacity>
 

@@ -48,7 +48,7 @@ const GOOGLE_MAPS_APIKEY = 'AIzaSyCW7L8qQi78TOlySI6lc5ThzDKvqWmY0b8';
     const fetchDrivers = async () => {
      
       try {
-        const response = await fetch('http://10.20.32.58:3001/my', {
+        const response = await fetch('http://10.20.32.44:3001/my', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -96,7 +96,7 @@ const GOOGLE_MAPS_APIKEY = 'AIzaSyCW7L8qQi78TOlySI6lc5ThzDKvqWmY0b8';
 
     const continueOrder = async () => {
       try {
-        const response = await fetch('http://10.20.32.58:3001/orderride', {
+        const response = await fetch('http://10.20.32.44:3001/orderride', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

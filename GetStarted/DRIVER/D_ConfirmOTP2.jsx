@@ -49,7 +49,7 @@ function D_ConfirmOTP2({route, navigation}){
   
       // Send POST request to your backend
       try {
-        const response = await fetch('http://10.20.32.58:3001/d_otpresend2', {
+        const response = await fetch('http://10.20.32.44:3001/d_otpresend2', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -90,7 +90,7 @@ function D_ConfirmOTP2({route, navigation}){
         const combinedOtp = otp.join('');
         console.log('Combined OTP:', combinedOtp); 
   
-        const response = await fetch('http://10.20.32.58:3001/d_mmverifyotp2', {
+        const response = await fetch('http://10.20.32.44:3001/d_mmverifyotp2', {
           method: 'POST',
           headers: {  
             'Content-Type': 'application/json',

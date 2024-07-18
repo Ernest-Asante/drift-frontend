@@ -49,7 +49,7 @@ function ConfirmOtp({  navigation}){
       // console.log('Combined OTP:', combinedOtp);
       // Send POST request to your backend
       try {
-        const response = await fetch('http://10.20.32.58:3001/otpresend', {
+        const response = await fetch('http://10.20.32.44:3001/otpresend', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -89,7 +89,7 @@ function ConfirmOtp({  navigation}){
         const combinedOtp = otp.join('');
         console.log('Combined OTP:', combinedOtp);
 
-        const response = await fetch('http://10.20.32.58:3001/mmverifyotp', {
+        const response = await fetch('http://10.20.32.44:3001/mmverifyotp', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

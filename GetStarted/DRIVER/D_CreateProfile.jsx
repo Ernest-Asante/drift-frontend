@@ -28,17 +28,17 @@ const D_CreateProfile = ({route,navigation}) => {
 
     const pickImage = async () => {
       let result = await ImagePicker.launchImageLibraryAsync({
-          mediaTypes: ImagePicker.MediaTypeOptions.Images,
+          mediaTypes: ImagePicker.MediaTypeOptions.All,
           allowsEditing: true,
           aspect: [4, 3],
           quality: 1,
-          base64: true,
+         // base64: true,
       });
 
-      console.log(result);
+      console.log(result); 
 
       if (!result.canceled) {
-          setPhoto(result.uri);
+          setPhoto(result.assets[0].uri);
       }
   };
 
@@ -46,13 +46,12 @@ const D_CreateProfile = ({route,navigation}) => {
       // Validate emailInput if needed  
      // const combinedOtp = otp.join(''); 
      // console.log('Combined OTP:', combinedOtp);     
-   const photoBase64 = photo ? `data:image/jpeg;base64,${photo.base64}` : '';
-   console.log(photoBase64)
+  
       // Send POST request to your backend     
       setBlock(null)
       console.log('Submitting Profile:', { identity, contact, firstName, lastName });
       try {
-        const response = await fetch('http://10.20.32.58:3001/d_mmotpsend2', {
+        const response = await fetch('http://10.20.32.44:3001/d_mmotpsend2', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json', 
@@ -117,7 +116,7 @@ const D_CreateProfile = ({route,navigation}) => {
       // Send POST request to your backend   
       console.log('Submitting Profile:', { identity, contact, firstName, lastName , dataId});
       try {
-        const response = await fetch('http://10.20.32.58:3001/d_mmotpsend3', {
+        const response = await fetch('http://10.20.32.44:3001/d_mmotpsend3', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json', 
@@ -164,7 +163,7 @@ const D_CreateProfile = ({route,navigation}) => {
       // Send POST request to your backend   
       console.log('Submitting Profile:', { identity, contact, firstName, lastName, dataId });
       try {
-        const response = await fetch('http://10.20.32.58:3001/d_mmotpsend3', {
+        const response = await fetch('http://10.20.32.44:3001/d_mmotpsend3', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json', 
@@ -210,7 +209,7 @@ const D_CreateProfile = ({route,navigation}) => {
       // Send POST request to your backend   
       console.log('Submitting Profile:', { identity, contact, firstName, lastName });
       try {
-        const response = await fetch('http://10.20.32.58:3001/d_mmotpsend3', {
+        const response = await fetch('http://10.20.32.44:3001/d_mmotpsend3', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json', 
@@ -480,7 +479,7 @@ const styles = StyleSheet.create({
       marginLeft: "8px"  
     },
     textlabel: {
-      fontSize: "15px",
+      fontSize: 15,
       margin: "1px"
     },
     input: {
@@ -495,7 +494,7 @@ const styles = StyleSheet.create({
     },
    
    privacytext: {
-   fontSize: "10px",
+   fontSize: 10,
    marginLeft: "5px",
    marginTop: 25
    },

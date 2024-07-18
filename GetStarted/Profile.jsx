@@ -10,6 +10,8 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Modal from "react-native-modal";
 
 
+
+
 const getstarted = require('../assets/getstarted.jpeg');
 const Profile = ({navigation}) => {
     const [isModalVisible, setModalVisible] = useState(false);
@@ -18,6 +20,21 @@ const Profile = ({navigation}) => {
     setModalVisible(!isModalVisible);
   };
 
+  
+const signOut = async () => {
+  try {
+    // Remove the 'token' key from AsyncStorage
+    await AsyncStorage.removeItem('key');
+    await AsyncStorage.removeItem('id');
+    await AsyncStorage.removeItem('type');
+
+    console.log('Success', 'You have been signed out.');
+    navigation.navigate('GetStarted')
+  } catch (error) { 
+    console.error('Error signing out:', error); 
+  
+  }
+};
     const paystackWebViewRef = useRef(paystackProps.PayStackRef); 
 
   return (
@@ -86,6 +103,12 @@ const Profile = ({navigation}) => {
           <Text style={styles.text1}>john.doe@example.com</Text>
         </View>
       </View>
+      <View> 
+         <TouchableOpacity style={styles.button} onPress={signOut}>
+             <Text style={styles.buttonText}>LOGOUT</Text>
+             
+          </TouchableOpacity>
+        </View>
       <View style={styles.walletContainer}>
            <Text style={styles.text2}>PAYMENTS - WALLET </Text>
      
