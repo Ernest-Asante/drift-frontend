@@ -1,0 +1,3 @@
+IN our second year as a computer science student at KNUST, we were divided into group and tasked to clone a mobile application. My group had Uber
+I initially worked as the system analyst but later  helped in developing the frontend and backend...
+This is the client interface(frontend) was developed in React Native and paystack payment integration
