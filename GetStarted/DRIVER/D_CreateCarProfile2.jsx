@@ -1,10 +1,8 @@
-import { View, Text,TextInput,TouchableOpacity,ActivityIndicator, StyleSheet, Pressable} from 'react-native'
-import React, {useState,useEffect} from 'react'
-import Icon from 'react-native-vector-icons/Ionicons';
-import Checkbox from 'expo-checkbox';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { StatusBar } from 'expo-status-bar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { StatusBar } from 'expo-status-bar';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const D_CarDetail2 = ({route,navigation}) => {
    
@@ -22,7 +20,7 @@ const D_CarDetail2 = ({route,navigation}) => {
     useEffect(() => {
         const fetchFirstName = async () => {
           try {
-            const response = await fetch('http://10.20.32.44:3001/d_getfirstname', {
+            const response = await fetch('http://172.20.10.3:3001/d_getfirstname', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json', 
@@ -54,7 +52,7 @@ const D_CarDetail2 = ({route,navigation}) => {
   
       // Send POST request to your backend
       try {
-        const response = await fetch('http://10.20.32.44:3001/d_addcardetails', {
+        const response = await fetch('http://172.20.10.3:3001/d_addcardetails', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -76,7 +74,7 @@ const D_CarDetail2 = ({route,navigation}) => {
           AsyncStorage.setItem('key', "verified");
           AsyncStorage.setItem('id', contacts)
           AsyncStorage.setItem('type', "driver")
-          navigation.navigate('DriverRequestD', { identity:contacts});
+          navigation.navigate('HomeScreenD', { identity:contacts});
         } else { 
           console.error('Failed to add data:', data.message);
           // Show an alert or other notification to the user
@@ -208,7 +206,7 @@ const styles = StyleSheet.create({
       marginLeft: "8px"  
     },
     textlabel: {
-      fontSize: "15px",
+      fontSize: 15,
       margin: "1px"
     },
     input: {
@@ -223,7 +221,7 @@ const styles = StyleSheet.create({
     },
    
    privacytext: {
-   fontSize: "10px",
+   fontSize: 10,
    marginLeft: "5px",
    marginTop: 25
    },

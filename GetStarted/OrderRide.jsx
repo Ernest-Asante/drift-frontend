@@ -1,10 +1,10 @@
-import { StyleSheet, Text, View, TextInput, TouchableOpacity ,FlatList, Pressable} from 'react-native'
-import React, {useState, useEffect} from 'react'
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import MapView, {Marker} from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 
 import MapViewDirections from 'react-native-maps-directions';
+
 
 
 export default function OrderRide({navigation, route}) {
@@ -22,9 +22,16 @@ export default function OrderRide({navigation, route}) {
  const [zIndexValue2, setZIndexValue2] = useState(2);
  const [zIndexValue3, setZIndexValue3] = useState(2);
 
- const origin1 = {latitude: 6.6695, longitude:-1.5607};
-const destination1 = {latitude: 6.5263, longitude: -1.3043};
-const GOOGLE_MAPS_APIKEY = 'AIzaSyCW7L8qQi78TOlySI6lc5ThzDKvqWmY0b8';
+ const origin1 = {
+  latitude: origin && parseFloat(origin.latitude),
+  longitude: origin && parseFloat(origin.longitude),
+};
+
+const destination1 = {
+  latitude: destination && parseFloat(destination.latitude.toFixed(4)),
+  longitude: destination && parseFloat(destination.longitude.toFixed(4)),
+};
+const GOOGLE_MAPS_APIKEY = 'AIzaSyA7CbIXfXkekJjOLTnBCUkqR_MMkVC72QI';
 
  console.log(riderId)
 
@@ -48,7 +55,7 @@ const GOOGLE_MAPS_APIKEY = 'AIzaSyCW7L8qQi78TOlySI6lc5ThzDKvqWmY0b8';
     const fetchDrivers = async () => {
      
       try {
-        const response = await fetch('http://10.20.32.44:3001/my', {
+        const response = await fetch('http://172.20.10.3:3001/my', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -96,7 +103,7 @@ const GOOGLE_MAPS_APIKEY = 'AIzaSyCW7L8qQi78TOlySI6lc5ThzDKvqWmY0b8';
 
     const continueOrder = async () => {
       try {
-        const response = await fetch('http://10.20.32.44:3001/orderride', {
+        const response = await fetch('http://172.20.10.3:3001/orderride', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -160,13 +167,14 @@ useEffect(() => {
 <View style={styles.container}>
 <MapView style={styles.map} 
       initialRegion={{
-        latitude: 6.6695,
-        longitude: -1.5607,
+        latitude:  origin && parseFloat(origin.latitude.toFixed(4)),
+        longitude: origin && parseFloat(origin.longitude.toFixed(4)),
         latitudeDelta: 0.095,
         longitudeDelta: 0.0421,
       }}
       >
-         <MapViewDirections
+      
+       <MapViewDirections
       origin={origin1}
       destination={destination1}
       apikey={GOOGLE_MAPS_APIKEY}
@@ -175,15 +183,15 @@ useEffect(() => {
     />
     <Marker
   coordinate={{
-    latitude: 6.6695,
-    longitude: -1.5607,
+    latitude: origin && parseFloat(origin.latitude.toFixed(4)),
+    longitude: origin && parseFloat(origin.longitude.toFixed(4)),
   }}/>
 
 
     <Marker
   coordinate={{
-    latitude:  6.5263,
-    longitude: -1.3043,
+    latitude: destination && parseFloat(destination.latitude.toFixed(4)),
+    longitude: destination && parseFloat(destination.longitude.toFixed(4)),
   }}/>
       </MapView>
      
@@ -226,7 +234,7 @@ useEffect(() => {
             minLength={2}
             onPress={handleOriginPress}
             query={{
-              key: 'AIzaSyCW7L8qQi78TOlySI6lc5ThzDKvqWmY0b8',
+              key: 'AIzaSyA7CbIXfXkekJjOLTnBCUkqR_MMkVC72QI',
               language: 'en',
             }}
             fetchDetails={true}
@@ -270,7 +278,7 @@ useEffect(() => {
             minLength={2}
             onPress={handleDestinationPress}
             query={{
-              key: 'AIzaSyCW7L8qQi78TOlySI6lc5ThzDKvqWmY0b8',
+              key: 'AIzaSyA7CbIXfXkekJjOLTnBCUkqR_MMkVC72QI',
               language: 'en',
             }}
             fetchDetails={true}

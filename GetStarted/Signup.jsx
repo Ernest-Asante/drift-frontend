@@ -1,8 +1,7 @@
-import { View, Text,TextInput,TouchableOpacity, StyleSheet, Pressable} from 'react-native'
-import React,{useState} from 'react'
-import Icon from 'react-native-vector-icons/Ionicons';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
+import React, { useState } from 'react';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 
 
@@ -12,14 +11,14 @@ const Signup = ({navigation}) => {
    
   // Local state to manage input
 
-  const handleOTPSubmit = async () => {
+  const handleOTPSubmit = async () => { 
     // Validate emailInput if needed 
    // const combinedOtp = otp.join('');
    // console.log('Combined OTP:', combinedOtp);
 
     // Send POST request to your backend
     try {
-      const response = await fetch('http://10.20.32.44:3001/mmotpsend', {
+      const response = await fetch('http://172.20.10.3:3001/mmotpsend', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -79,9 +78,9 @@ const Signup = ({navigation}) => {
       <Text style={styles.privacytext}>By proceeding, you consent to get emails  or SMS messages, including by automated means, from Drift and its affiliates to the number or email provided</Text>
       
       </View>
-      <Pressable style={styles.button} onPress={handleOTPSubmit}>
+      <TouchableOpacity style={styles.button} onPress={handleOTPSubmit}>
           <Text style={styles.buttonText}>SUBMIT</Text>
-      </Pressable> 
+      </TouchableOpacity> 
 
     
     </View>

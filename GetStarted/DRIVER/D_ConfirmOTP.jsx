@@ -1,8 +1,6 @@
-import { View, Text ,TextInput,TouchableOpacity, StyleSheet, Pressable} from 'react-native'
-import React, { useState, useEffect } from 'react'
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { StatusBar } from 'expo-status-bar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useEffect, useState } from 'react';
+import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
 
 
@@ -12,7 +10,7 @@ function D_ConfirmOTP({route, navigation}){
     const [timeOut, setTimeOut] = useState(false);
     const { identity } = route.params;
 
-    const [timeLeft, setTimeLeft] = useState(30); // 60 seconds countdown
+    const [timeLeft, setTimeLeft] = useState(60); // 60 seconds countdown
 
   useEffect(() => { 
     // Countdown timer logic 
@@ -48,7 +46,7 @@ function D_ConfirmOTP({route, navigation}){
   
       // Send POST request to your backend
       try {
-        const response = await fetch('http://10.20.32.44:3001/d_otpresend', {
+        const response = await fetch('http://172.20.10.3:3001/d_otpresend', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -67,7 +65,7 @@ function D_ConfirmOTP({route, navigation}){
         if (data.message === 'OTP sent successfully') {
           console.log('Email added successfully:', data.message);
           setTimeOut(false)
-          setTimeLeft(30)
+          setTimeLeft(60)
           // Navigate to next screen (ConfirmOTP or wherever needed)
          
         } else { 
@@ -89,7 +87,7 @@ function D_ConfirmOTP({route, navigation}){
         const combinedOtp = otp.join('');
         console.log('Combined OTP:', combinedOtp);
   
-        const response = await fetch('http://10.20.32.44:3001/d_mmverifyotp', {
+        const response = await fetch('http://172.20.10.3:3001/d_mmverifyotp', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -159,7 +157,7 @@ function D_ConfirmOTP({route, navigation}){
         <TextInput
           key={index}
           style={styles.input}
-          keyboardType="numeric"
+          keyboardType="email"
           maxLength={1}
           onChangeText={(text) => handleInput(text, index)}
           value={digit}

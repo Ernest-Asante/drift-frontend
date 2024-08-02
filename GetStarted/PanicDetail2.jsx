@@ -1,10 +1,8 @@
-import { View, Text,TextInput,TouchableOpacity,ActivityIndicator, StyleSheet, Pressable} from 'react-native'
-import React, {useState,useEffect} from 'react'
-import Icon from 'react-native-vector-icons/Ionicons';
-import Checkbox from 'expo-checkbox';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { StatusBar } from 'expo-status-bar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { StatusBar } from 'expo-status-bar';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const PanicDetail2 = ({route,navigation}) => {
    
@@ -20,7 +18,7 @@ const PanicDetail2 = ({route,navigation}) => {
     useEffect(() => {
         const fetchFirstName = async () => {
           try {
-            const response = await fetch('http://10.20.32.44:3001/getfirstname', {
+            const response = await fetch('http://172.20.10.3:3001/getfirstname', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json', 
@@ -52,7 +50,7 @@ const PanicDetail2 = ({route,navigation}) => {
   
       // Send POST request to your backend
       try {
-        const response = await fetch('http://10.20.32.44:3001/addpanic', {
+        const response = await fetch('http://172.20.10.3:3001/addpanic', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -203,7 +201,7 @@ const styles = StyleSheet.create({
       marginLeft: "8px"  
     },
     textlabel: {
-      fontSize: "15px",
+      fontSize: 10,
       margin: "1px"
     },
     input: {
@@ -218,7 +216,7 @@ const styles = StyleSheet.create({
     },
    
    privacytext: {
-   fontSize: "10px",
+   fontSize: 10,
    marginLeft: "5px",
    marginTop: 25
    },

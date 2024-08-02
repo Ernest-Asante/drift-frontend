@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { View, TextInput, Button, StyleSheet, Alert, FlatList, Text} from 'react-native';
+import React, { useState } from 'react';
+import { Alert, Button, StyleSheet, TextInput, View } from 'react-native';
 
 const EnterLocation = () => {
   const [latitude, setLatitude] = useState('');
@@ -11,7 +11,7 @@ const EnterLocation = () => {
   const handleSubmit = async () => {
     if (latitude && longitude) { 
       try {
-        const response = await fetch('http://10.20.32.44:3001/coordinates', {
+        const response = await fetch('http://172.20.10.3:3001/coordinates', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

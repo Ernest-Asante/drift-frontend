@@ -1,19 +1,20 @@
-import { View, Text, StyleSheet, Image, Pressable, TouchableOpacity,SafeAreaView} from 'react-native'
-import React,{useEffect, useState} from 'react'
-import AsyncStorage from '@react-native-async-storage/async-storage'; 
-import MapView, {Marker} from 'react-native-maps';
-import * as Location from 'expo-location';
-import { FontAwesome } from '@expo/vector-icons';
-import { Ionicons } from '@expo/vector-icons';
-import Modal from "react-native-modal";
+import { FontAwesome, Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createClient } from '@supabase/supabase-js';
+import * as Location from 'expo-location';
+import React, { useEffect, useState } from 'react';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import MapView, { Marker } from 'react-native-maps';
+import Modal from "react-native-modal";
+
+import MapViewDirections from 'react-native-maps-directions';
 
 
 const supabase = createClient('https://ykvtwisrbzpkzejkposo.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlrdnR3aXNyYnpwa3plamtwb3NvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTgxNTk1NzcsImV4cCI6MjAzMzczNTU3N30.b1fqoxTiOYOVRTlnWwcSJTB-AWxCpfJudXnGRx_v_Lk')
 
 const getstarted = require('../../assets/getstarted.jpeg');
 
-const carr = require('../../assets/carr.jpg');
+const carr = require('../../assets/carr.png');
 
 
 
@@ -26,14 +27,28 @@ const D_HomeScreen = ({route,navigation}) => {
   const [plate, setPlate] = useState('');
   const [fare, setFare] = useState(0);
   const [tripId, setTripId] = useState(0);
+
  const [acceptData, setAcceptData] = useState('');
  const [rejectData, setRejectData] = useState('');
   const [data1, setData1] = useState('');
   const [accept, setAccept] = useState(false);
-  const [location, setLocation] = useState(null);
+  const [location, setLocation] = useState({ latitude: null, longitude: null });
   const [errorMsg, setErrorMsg] = useState(null);
-  const [lat, setLat] = useState(null);
-  const [long, setLong] = useState(null);
+  const [loading, setLoading] = useState(true);
+ 
+  const [pickupLat, setPickupLat] = useState(null);
+  const [pickupLong, setPickupLong] = useState(null);
+
+  const [dropOffLat, setDropOffLat] = useState(null);
+  const [dropOffLong, setDropOffLong] = useState(null);
+
+
+  const [from, setFrom] = useState(null);
+  const [to, setTo] = useState(null);
+
+  const [phone, setPhone] = useState(null);
+
+  
 
   const [rideAvailable, setRideAvailable] = useState(false);
   const [pollingTimer, setPollingTimer] = useState(null);
@@ -51,7 +66,15 @@ const D_HomeScreen = ({route,navigation}) => {
 
   const column = identity.includes('@') ? 'email' : 'phone';
  // let inverseColumn = identity.includes('@') ? 'phone' : 'email';
+
+
+
 console.log(column)
+
+const origin0 = {latitude: parseFloat(location.latitude), longitude:parseFloat(location.longitude)};
+const origin1 = {latitude:   parseFloat(pickupLat), longitude:parseFloat(pickupLong)};
+const destination1 = {latitude: parseFloat(dropOffLat), longitude: parseFloat(dropOffLong)};
+const GOOGLE_MAPS_APIKEY = 'AIzaSyA7CbIXfXkekJjOLTnBCUkqR_MMkVC72QI';
 
   const openProfile = () => {
     navigation.navigate('Profile');
@@ -65,29 +88,59 @@ console.log(column)
     setModalVisible(!isModalVisible);
   };
   useEffect(() => {
-    (async () => {
+    const getLocationAndUpdate = async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
         setErrorMsg('Permission to access location was denied');
+        setLoading(false);
         return;
       }
 
-      try {
-        let location = await Location.getCurrentPositionAsync({});
-        setLocation(location);
-        console.log(location)
-        setLat(location.coords.latitude)
-        setLong(location.coords.longitude)
+      let initialLocation = await Location.getCurrentPositionAsync({});
+      const { latitude, longitude } = initialLocation.coords;
+      setLocation({ latitude, longitude });
+      await updateDriverLocation({ latitude, longitude });
 
-       
-      } catch (error) {
-        setErrorMsg('Failed to fetch location');
-        console.log(errorMsg)
-      }
-     
+      setLoading(false);
 
-    })();
+      Location.watchPositionAsync(
+        {
+          accuracy: Location.Accuracy.High,
+          timeInterval: 5000,
+         distanceInterval: 5,
+        },
+        (newLocation) => {
+          const { coords } = newLocation;
+          const updatedLocation = {
+            latitude: coords.latitude, 
+            longitude: coords.longitude,
+          };
+          setLocation(updatedLocation);
+          updateDriverLocation(updatedLocation);
+        }
+      );
+    };
+    getLocationAndUpdate();
   }, []);
+
+  const updateDriverLocation = async (coords) => {
+    const { latitude, longitude } = coords;
+   // const userId = 'driver-id'; // Replace with actual driver ID
+
+    const { error } = await supabase
+      .from('driver')
+      .update({ location: `POINT(${longitude} ${latitude})` , latitude: latitude, longitude: longitude})
+      .eq(column, identity)
+
+    if (error) {
+      console.error('Error updating location:', error); 
+    } else{
+      console.log('updated', column, identity)
+      console.log(latitude)
+    }
+  };
+
+ 
 
   const  carList = ([
     {
@@ -168,11 +221,20 @@ console.log(column)
         setDriverId(payload.new.ride_request.driverId)
         setUserId(payload.new.ride_request.riderId)
         setFare(payload.new.ride_request.fare)
+        setPickupLat(payload.new.ride_request.fromLat)
+        setPickupLong(payload.new.ride_request.fromLong)
+        setDropOffLat(payload.new.ride_request.toLat)
+        setDropOffLong(payload.new.ride_request.toLong)
+        setFrom(payload.new.ride_request.from)
+        setTo(payload.new.ride_request.to)
+        setPhone(payload.new.phone)
           console.log(payload)
           setModalVisible(true)
           console.log(isRideAvailable)
           console.log(model)
           console.log(color)
+
+          console.log()
           
         }
       }
@@ -190,7 +252,7 @@ console.log(column)
   
   const acceptRide = async () => {
     try {
-      const response = await fetch('http://10.20.32.44:3001/acceptride', {
+      const response = await fetch('http://172.20.10.3:3001/acceptride', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -202,7 +264,7 @@ console.log(column)
            // time:" 4 minutes",
             model: model, 
             color: color,
-            plate: plate,
+            plate: plate, 
            
             
           // Replace with actual user ID
@@ -233,7 +295,7 @@ console.log(column)
 
   const rejectRide = async () => {
     try {
-      const response = await fetch('http://10.20.32.44:3001/rejectride', {
+      const response = await fetch('http://172.20.10.3:3001/rejectride', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -312,6 +374,16 @@ console.log(column)
   };
 
 
+  if (loading) {
+    return (
+      <View>
+        <Text>Loading...</Text>
+      </View>
+    );
+
+  }
+
+
   return (
    
    
@@ -325,39 +397,77 @@ console.log(column)
      
      <MapView style={styles.map} 
      initialRegion={{
-       latitude: 6.6695, 
-       longitude: -1.5607,
-       latitudeDelta: 0.095,
-       longitudeDelta: 0.0421,
+       latitude: parseFloat(location.latitude), 
+       longitude: parseFloat(location.longitude),
+       latitudeDelta: 0.195,
+       longitudeDelta: 0.1421,
      }}>
-        <Marker
-     
-     coordinate={{latitude: 6.6695, longitude: -1.5607}}
-     title={"knust"}
-     description={"knust location"}
-  //   pinColor= {"#4287f5"} 
-     />
 
+<Marker
+      
+      coordinate={{latitude: parseFloat(location.latitude), longitude: (location.longitude)}}
+      title={"me"}
+      description={"uber driver"}
+   //   pinColor= {"#4287f5"} 
+      />
+    
+
+      <Marker
+          
+          coordinate={{latitude:parseFloat(location.latitude), longitude:parseFloat(location.longitude)}}
+          title={"me"}
+          description={"uber driver"}
         
-    {
-     carList.map((car)=>{
-       return(
-         <Marker
-         key={car.id}
-         coordinate={{latitude:car.latitude, longitude:car.longitude}}
-         title={car.title}
-       
-         >
-             <Image
-             source={carr}
-             style={{ width: 32, height: 32 }} // Adjust size as needed
-           />
-         </Marker>
-       )
+          >
+        
+        <Image
+              source={carr}
+              style={{ width: 60, height: 60 }} // Adjust size as needed
+        />
+            
+        </Marker>
 
-     })
-    }
 
+     
+
+<MapViewDirections
+      origin={origin0}
+      destination={origin1}
+      apikey={GOOGLE_MAPS_APIKEY}
+       strokeWidth={4}
+    strokeColor="blue"
+    />
+
+
+<MapViewDirections
+      origin={origin1}
+      destination={destination1}
+      apikey={GOOGLE_MAPS_APIKEY}
+       strokeWidth={4}
+    strokeColor="green"
+    />
+
+
+ <Marker
+  coordinate={{
+    latitude:  parseFloat(pickupLat),
+    longitude: parseFloat(pickupLong),
+  }}
+  
+  title={"Pickup @"}
+  description={from}/>
+
+
+    <Marker
+  coordinate={{
+    latitude: parseFloat(dropOffLat),
+    longitude: parseFloat(dropOffLong),
+  }}
+  
+  title={"Dropoff @"}
+  description={to}/>
+
+   
      </MapView> 
      
     <View style={styles.toggleContainer}>
@@ -383,7 +493,8 @@ console.log(column)
     </View>
 
           <View style={styles.driverCard}>
-              <Text style={styles.title}>APPROACHING RIDER - ID: 18712816</Text>
+              <Text style={styles.title}>APPROACHING RIDER -----</Text>
+              <Text style={styles.title}>Telephone: {phone}</Text>
               
              
               <TouchableOpacity style={styles.button4} onPress={''}>
@@ -404,18 +515,33 @@ console.log(column)
      
       <MapView style={styles.map} 
       initialRegion={{
-        latitude: 6.6695,
-        longitude: -1.5607,
+        latitude: location.latitude,
+        longitude: location.longitude,
         latitudeDelta: 0.095,
         longitudeDelta: 0.0421,
       }}>
-         <Marker
+         <Marker 
       
-      coordinate={{latitude: 6.6695, longitude: -1.5607}}
-      title={"knust"}
-      description={"knust location"}
+      coordinate={{latitude: location.latitude, longitude: location.longitude}}
+      title={"me"}
+      description={"you are here"}
    //   pinColor= {"#4287f5"} 
       />
+
+<Marker
+       
+          coordinate={{latitude: location.latitude, longitude: location.longitude}}
+          title={"me"}
+          description={"you are here"}
+        
+          >
+          <View  style={{ width: 62, height: 62 }} >
+              <Image
+              source={carr}
+              style={{ width: 60, height: 60 }} // Adjust size as needed
+            />
+            </View>
+          </Marker>
 
          
      {
@@ -427,10 +553,12 @@ console.log(column)
           title={car.title}
         
           >
+          <View  style={{ width: 62, height: 62 }} >
               <Image
               source={carr}
-              style={{ width: 32, height: 32 }} // Adjust size as needed
+              style={{ width: 60, height: 60 }} // Adjust size as needed
             />
+            </View>
           </Marker>
         )
 
@@ -738,7 +866,7 @@ const styles = StyleSheet.create({
       backgroundColor: 'white',
       borderRadius: 20,
       padding: 35,
-      height: 280,
+      height: 300,
       width: "90%",
      // alignItems: 'center',
       shadowColor: '#000',

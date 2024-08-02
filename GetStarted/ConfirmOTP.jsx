@@ -1,5 +1,5 @@
-import { View, Text ,TextInput,TouchableOpacity, StyleSheet, Pressable} from 'react-native'
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react';
+import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 //import { SafeAreaProvider } from 'react-native-safe-area-context';
 //import { StatusBar } from 'expo-status-bar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -14,7 +14,7 @@ function ConfirmOtp({  navigation}){
     const [timeOut, setTimeOut] = useState(false);
     const { identity } = route.params;
 
-    const [timeLeft, setTimeLeft] = useState(30); // 60 seconds countdown
+    const [timeLeft, setTimeLeft] = useState(60); // 60 seconds countdown
 
     useEffect(() => {
       // Countdown timer logic 
@@ -49,7 +49,7 @@ function ConfirmOtp({  navigation}){
       // console.log('Combined OTP:', combinedOtp);
       // Send POST request to your backend
       try {
-        const response = await fetch('http://10.20.32.44:3001/otpresend', {
+        const response = await fetch('http://172.20.10.3:3001/otpresend', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -68,7 +68,7 @@ function ConfirmOtp({  navigation}){
         if (data.message === 'OTP sent successfully') {
           console.log('Email added successfully:', data.message);
           setTimeOut(false);
-          setTimeLeft(30);
+          setTimeLeft(60);
           // Navigate to next screen (ConfirmOTP or wherever needed)
         } else {
           console.error('Failed to send OTP:', data.message);
@@ -89,7 +89,7 @@ function ConfirmOtp({  navigation}){
         const combinedOtp = otp.join('');
         console.log('Combined OTP:', combinedOtp);
 
-        const response = await fetch('http://10.20.32.44:3001/mmverifyotp', {
+        const response = await fetch('http://172.20.10.3:3001/mmverifyotp', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -143,7 +143,8 @@ function ConfirmOtp({  navigation}){
     };
 
     return (
-      <View style={styles.container}>
+     
+        <View style={styles.container}>
         <View style={styles.titlebody}>
           <Text style={styles.title}>Drift</Text>
         </View>
@@ -157,7 +158,7 @@ function ConfirmOtp({  navigation}){
             <TextInput
               key={index}
               style={styles.input}
-              keyboardType="numeric"
+              keyboardType="email"
               maxLength={1}
               onChangeText={(text) => handleInput(text, index)}
               value={digit}
@@ -191,6 +192,7 @@ function ConfirmOtp({  navigation}){
         </Pressable>
 
       </View>
+     
     ); 
   }
 

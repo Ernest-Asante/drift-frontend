@@ -1,20 +1,22 @@
-import { View, Text, StyleSheet, Image, Pressable, TouchableOpacity,SafeAreaView} from 'react-native'
-import React,{useEffect, useState} from 'react'
-import AsyncStorage from '@react-native-async-storage/async-storage'; 
-import MapView, {Marker} from 'react-native-maps';
-import * as Location from 'expo-location';
 import { FontAwesome } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Location from 'expo-location';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import MapView, { Marker } from 'react-native-maps';
 //import MyDrawer from '../Drawer';
 //import { Root } from '../App';
 
 
 const getstarted = require('../assets/getstarted.jpeg');
 
-const carr = require('../assets/carr.jpg');
+const carr = require('../assets/carr.png');
 
 const HomeScreen = ({route,navigation}) => {
   const [dataId, setDataId] = useState('');
+  const [name, setName] = useState('');
   const [location, setLocation] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState(null);
   const [lat, setLat] = useState(null);
   const [long, setLong] = useState(null);
@@ -102,7 +104,7 @@ const HomeScreen = ({route,navigation}) => {
   useEffect(() => {
     const fetchUserId = async () => {
       try {
-        const response = await fetch('http://10.20.32.44:3001/getfirstname', {
+        const response = await fetch('http://172.20.10.3:3001/getfirstname', {
           method: 'POST',
           headers: { 
             'Content-Type': 'application/json', 
@@ -116,8 +118,10 @@ const HomeScreen = ({route,navigation}) => {
 
         const data = await response.json();
         setDataId(data.dataId);  
+        setName(data.firstName)
         console.log(dataId)
         console.log(data)
+        setLoading(false);
       } catch (error) { 
         console.error('Error fetching userId:', error.message);
       }  finally {
@@ -142,6 +146,20 @@ const HomeScreen = ({route,navigation}) => {
     
     }
   };
+
+ 
+  if(loading){
+    return  ( <>
+   
+    <View style={{alignItems: "center", justifyContent:"center", marginTop:"90%"}}>
+      
+      <Text style={{fontSize: 20}}>CONNECTECTING</Text>
+      <ActivityIndicator size="large" color="#0000ff" style={{marginTop: 50}} /> 
+      
+      </View>
+    </>
+  )
+  }
 
 
   return (
@@ -175,11 +193,13 @@ const HomeScreen = ({route,navigation}) => {
           coordinate={{latitude:car.latitude, longitude:car.longitude}}
           title={car.title}
         
-          >
-              <Image
-              source={carr}
-              style={{ width: 32, height: 32 }} // Adjust size as needed
-            />
+          > 
+         
+          <Image
+          source={carr}
+          style={{ width: 60, height: 60 }} // Adjust size as needed
+        />
+        
           </Marker>
         )
 
@@ -211,7 +231,7 @@ const HomeScreen = ({route,navigation}) => {
      </View>
 
       <View style={styles.main}>
-         <Text style={styles.main1}>KELVIN, how may we help you today?</Text>
+         <Text style={styles.main1}>{name}, how may we help you today?</Text>
          <View style={styles.main2}>
        
            
@@ -226,13 +246,14 @@ const HomeScreen = ({route,navigation}) => {
             </Pressable>
           
         
-           <Pressable style={styles.main4} onPress={() => navigation.navigate('SendParcel', { riderId:dataId})}>
+           <Pressable style={styles.main4} onPress={() => navigation.navigate('OrderRide', { riderId:dataId})}>
            <Image 
               source={getstarted}
               style={styles.image} />
             <View>
                 <Text  style={styles.rideText}>DRIFT SEND</Text>
                 <Text >Send a parcel</Text>
+                
             </View>
           </Pressable>
          </View>

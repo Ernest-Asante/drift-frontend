@@ -1,5 +1,5 @@
-import { View, Text, Image, StyleSheet, TouchableOpacity, Pressable, SafeAreaView} from 'react-native'
-import React from 'react'
+import React from 'react';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import { StatusBar } from 'expo-status-bar';
 
@@ -42,8 +42,8 @@ const styles = StyleSheet.create({
    
     },
     image: {
-        width: 160,
-        height: 160,
+        width: 150,
+        height: 150,
         borderRadius: 75, 
         marginBottom: 20
        
@@ -53,8 +53,8 @@ const styles = StyleSheet.create({
         margin: 20
     },
      description : {
-        fontSize: 30,
-        margin: 12
+        fontSize: 20,
+        margin: 10
     },
      
    button: {
@@ -75,6 +75,6 @@ const styles = StyleSheet.create({
     text: {
       fontSize: 35,
       margin: 5,
-      marginTop:30
+      marginTop:20
     }
   });

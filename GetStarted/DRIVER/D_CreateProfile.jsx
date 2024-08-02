@@ -1,10 +1,9 @@
-import { View, Text,TextInput,TouchableOpacity, StyleSheet,ScrollView, Pressable,  Dimensions} from 'react-native'
-import React, {useState} from 'react'
-import Icon from 'react-native-vector-icons/Ionicons';
 import Checkbox from 'expo-checkbox';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { StatusBar } from 'expo-status-bar';
 import * as ImagePicker from 'expo-image-picker';
+import { StatusBar } from 'expo-status-bar';
+import React, { useState } from 'react';
+import { Dimensions, Pressable, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const D_CreateProfile = ({route,navigation}) => {
     const [isChecked, setIsChecked] = useState(false);
@@ -51,12 +50,12 @@ const D_CreateProfile = ({route,navigation}) => {
       setBlock(null)
       console.log('Submitting Profile:', { identity, contact, firstName, lastName });
       try {
-        const response = await fetch('http://10.20.32.44:3001/d_mmotpsend2', {
+        const response = await fetch('http://172.20.10.3:3001/d_mmotpsend2', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json', 
           },
-          body: JSON.stringify({   identity:identity,contact:contact, firstName: firstName, lastName:lastName, address: address, ghanacard: ghanaCard, photo: photoBase64}),
+          body: JSON.stringify({   identity:identity,contact:contact, firstName: firstName, lastName:lastName, address: address, ghanacard: ghanaCard}),
         });
     
         if (!response.ok) {
@@ -76,7 +75,7 @@ const D_CreateProfile = ({route,navigation}) => {
       
         } else if(data.message === 'OTP sent successfully'){
           console.log('OTP sent successfully')
-          navigation.navigate('ConfirmOTP2D', { identity: identity, contact:contact, firstName, lastName, photo, ghanacard:ghanaCard, address }) 
+          navigation.navigate('ConfirmOTP2D', { identity: identity, contact:contact, firstName, lastName, ghanacard:ghanaCard, address }) 
         }
         else if(data.error === 'Failed to send OTP email'){
           console.error('Error fetching data:', data.error);
@@ -116,7 +115,7 @@ const D_CreateProfile = ({route,navigation}) => {
       // Send POST request to your backend   
       console.log('Submitting Profile:', { identity, contact, firstName, lastName , dataId});
       try {
-        const response = await fetch('http://10.20.32.44:3001/d_mmotpsend3', {
+        const response = await fetch('http://172.20.10.3:3001/d_mmotpsend3', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json', 
@@ -163,7 +162,7 @@ const D_CreateProfile = ({route,navigation}) => {
       // Send POST request to your backend   
       console.log('Submitting Profile:', { identity, contact, firstName, lastName, dataId });
       try {
-        const response = await fetch('http://10.20.32.44:3001/d_mmotpsend3', {
+        const response = await fetch('http://172.20.10.3:3001/d_mmotpsend3', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json', 
@@ -209,7 +208,7 @@ const D_CreateProfile = ({route,navigation}) => {
       // Send POST request to your backend   
       console.log('Submitting Profile:', { identity, contact, firstName, lastName });
       try {
-        const response = await fetch('http://10.20.32.44:3001/d_mmotpsend3', {
+        const response = await fetch('http://172.20.10.3:3001/d_mmotpsend3', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json', 

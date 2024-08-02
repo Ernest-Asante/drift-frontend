@@ -1,6 +1,6 @@
-import { StyleSheet, Text, View, TextInput, TouchableOpacity ,Pressable} from 'react-native'
-import React, {useState, useEffect} from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 export default function D_DriverRequest() {
   const [data, setData] = useState('');
@@ -24,7 +24,7 @@ export default function D_DriverRequest() {
 
     const fetchDrivers = async () => {
       try {
-        const response = await fetch('http://10.20.32.44:3001/riderequest', {
+        const response = await fetch('http://172.20.10.3:3001/riderequest', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -55,7 +55,7 @@ export default function D_DriverRequest() {
 
     const acceptRide = async () => {
         try {
-          const response = await fetch('http://10.20.32.44:3001/acceptride', {
+          const response = await fetch('http://172.20.10.3:3001/acceptride', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -95,7 +95,7 @@ export default function D_DriverRequest() {
 
       const rejectRide = async () => {
         try {
-          const response = await fetch('http://10.20.32.44:3001/rejectride', {
+          const response = await fetch('http://172.20.10.3:3001/rejectride', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

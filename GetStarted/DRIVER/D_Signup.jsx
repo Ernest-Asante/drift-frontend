@@ -1,8 +1,7 @@
-import { View, Text,TextInput,TouchableOpacity, StyleSheet, Pressable} from 'react-native'
-import React,{useState} from 'react'
-import Icon from 'react-native-vector-icons/Ionicons';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
+import React, { useState } from 'react';
+import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 
 const D_Signup = ({navigation}) => {
@@ -18,7 +17,7 @@ const D_Signup = ({navigation}) => {
 
     // Send POST request to your backend
     try {
-      const response = await fetch('http://10.20.32.44:3001/d_mmotpsend', {
+      const response = await fetch('http://172.20.10.3:3001/d_mmotpsend', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -1,9 +1,8 @@
-import { View, Text,TextInput,TouchableOpacity, StyleSheet,ScrollView, Pressable,  Dimensions} from 'react-native'
-import React, {useState} from 'react'
-import Icon from 'react-native-vector-icons/Ionicons';
 import Checkbox from 'expo-checkbox';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
+import React, { useState } from 'react';
+import { Dimensions, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const CreateProfile = ({route,navigation}) => {
     const [isChecked, setIsChecked] = useState(false);
@@ -31,7 +30,7 @@ const CreateProfile = ({route,navigation}) => {
       setBlock(null)
       console.log('Submitting Profile:', { identity, contact, firstName, lastName });
       try {
-        const response = await fetch('http://10.20.32.44:3001/mmotpsend2', {
+        const response = await fetch('http://172.20.10.3:3001/mmotpsend2', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json', 
@@ -96,7 +95,7 @@ const CreateProfile = ({route,navigation}) => {
       // Send POST request to your backend   
       console.log('Submitting Profile:', { identity, contact, firstName, lastName , dataId});
       try {
-        const response = await fetch('http://10.20.32.44:3001/mmotpsend3', {
+        const response = await fetch('http://172.20.10.3:3001/mmotpsend3', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json', 
@@ -143,7 +142,7 @@ const CreateProfile = ({route,navigation}) => {
       // Send POST request to your backend   
       console.log('Submitting Profile:', { identity, contact, firstName, lastName, dataId });
       try {
-        const response = await fetch('http://10.20.32.44:3001/mmotpsend3', {
+        const response = await fetch('http://172.20.10.3:3001/mmotpsend3', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json', 
@@ -189,7 +188,7 @@ const CreateProfile = ({route,navigation}) => {
       // Send POST request to your backend   
       console.log('Submitting Profile:', { identity, contact, firstName, lastName });
       try {
-        const response = await fetch('http://10.20.32.44:3001/mmotpsend3', {
+        const response = await fetch('http://172.20.10.3:3001/mmotpsend3', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json', 
