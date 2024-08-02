@@ -11,7 +11,7 @@ const EnterLocation = () => {
   const handleSubmit = async () => {
     if (latitude && longitude) { 
       try {
-        const response = await fetch('http://10.20.32.44:3001/coordinates', {
+        const response = await fetch('http://172.20.10.7:3001/coordinates', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

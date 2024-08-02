@@ -1,4 +1,4 @@
-import { View, Text ,TextInput,TouchableOpacity, StyleSheet, Pressable} from 'react-native'
+import { View, Text ,TextInput,TouchableOpacity, StyleSheet, Pressable, SafeAreaView} from 'react-native'
 import React, { useState, useEffect } from 'react'
 //import { SafeAreaProvider } from 'react-native-safe-area-context';
 //import { StatusBar } from 'expo-status-bar';
@@ -49,7 +49,7 @@ function ConfirmOtp({  navigation}){
       // console.log('Combined OTP:', combinedOtp);
       // Send POST request to your backend
       try {
-        const response = await fetch('http://10.20.32.44:3001/otpresend', {
+        const response = await fetch('http://172.20.10.7:3001/otpresend', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -89,7 +89,7 @@ function ConfirmOtp({  navigation}){
         const combinedOtp = otp.join('');
         console.log('Combined OTP:', combinedOtp);
 
-        const response = await fetch('http://10.20.32.44:3001/mmverifyotp', {
+        const response = await fetch('http://172.20.10.7:3001/mmverifyotp', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -143,10 +143,9 @@ function ConfirmOtp({  navigation}){
     };
 
     return (
-      <View style={styles.container}>
-        <View style={styles.titlebody}>
-          <Text style={styles.title}>Drift</Text>
-        </View>
+      <SafeAreaView style={styles.container}>
+        <View>
+        
         <View>
           <Text style={styles.textlabel}>Enter the 4-digit code sent to you at: {identity}</Text>
          
@@ -167,6 +166,9 @@ function ConfirmOtp({  navigation}){
         </View>
 
         <Text style={styles.tip}>Tip: Be sure to check your inbox and spam folders</Text>
+        <Pressable style={styles.buttonContinue} onPress={handleOTPSubmit}>
+          <Text style={styles.buttonTextContinue}>CONTINUE</Text>
+        </Pressable>
 
         {timeOut ? (
           <Text style={styles.timer}>
@@ -186,11 +188,10 @@ function ConfirmOtp({  navigation}){
         )}
 
 
-        <Pressable style={styles.buttonContinue} onPress={handleOTPSubmit}>
-          <Text style={styles.buttonTextContinue}>CONTINUE</Text>
-        </Pressable>
+        
 
       </View>
+      </SafeAreaView>
     ); 
   }
 
@@ -200,6 +201,10 @@ export default ConfirmOtp
 const styles = StyleSheet.create({
     container: {
       flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: 'white',
+      padding: 20,
     },
     titlebody: {
         height: 50,                  // Height is 50 pixels
@@ -218,28 +223,30 @@ const styles = StyleSheet.create({
         margin: 5
     },
     input: {
-        width: 40,
-        height: 40,
+        width: 80,
+        height: 60,
         borderBottomWidth: 2,
         borderColor: 'gray',
         borderWidth: 1,  
         borderRadius: 5,
         fontSize: 18,
-        backgroundColor: '#f2f2f2' ,
+        backgroundColor: 'white' ,
         paddingLeft: 10,
         paddingRight: 10,
         textAlign: 'center',
+        color: 'black'
       },
       inputstyle: {
         flexDirection: 'row', // This will lay out the children (input boxes) horizontally.
-        justifyContent: 'space-around',
+        justifyContent: 'space-between',
         padding: 20,
         
       },
     tip: {
         fontSize:15,
-        margin: "3px",
+        margin: "3",
         top:2,
+        color: 'gray'
     },
     row: {
       flexDirection: 'row', // Items will be laid out horizontally
@@ -250,37 +257,36 @@ const styles = StyleSheet.create({
       width: 100,
       height: 40,
       padding: 4,
-      backgroundColor: '#1e90ff',
       borderRadius: 6,
       alignItems: 'center',
       justifyContent: "center",
-      top:30
-     
+      top:30,
+      color: "#FFFFFF",
      
       
     },
     buttonText: {
-      color: '#fff',
+      color: '#1C05B3',
       fontSize: 18,
       fontWeight: 'bold',
-      top:1
+      top:1,
+      borderBottomWidth: 1,
+      
     },
     resendotp: {
      
       fontSize: 23,
       margin: 3,
-      top:30
+      top:30,
     },
     buttonContinue: {
-      width: '70%',
+      width: 400,
       padding: 15,
-      backgroundColor: '#1e90ff',
+      backgroundColor: 'black',
       borderRadius: 6,
       alignItems: 'center',
-      justifyContent: "space-between",
       position: 'fixed',
-      marginTop:80,
-      marginLeft:"15%"
+      marginTop: 50,
      
      
       

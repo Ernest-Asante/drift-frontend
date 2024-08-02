@@ -5,17 +5,17 @@ import { StatusBar } from 'expo-status-bar';
 
 
 const getstarted = require('../assets/getstarted.jpeg');
+const logo = require('../assets/drift.png');
 function GetStarted({ navigation }) {
   return (
    <>
     <StatusBar style="auto" />
     <View style={styles.container}>
-     <Text  style={styles.name}>Drift</Text>
       <Image 
-      source={getstarted}
+      source={logo}
       style={styles.image} />
-      <Text style={styles.description}>A trip that goes anywhere,</Text>
-      <Text style={styles.description}>Let's get you to your next destination safely</Text>
+      <Text style={styles.description}>A trip that goes anywhere</Text>
+      <Text style={styles.description2}>Let's get you to your next destination safely</Text>
       
       <Text style={styles.text}>Continue as: </Text>
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Signup')}>
@@ -42,10 +42,9 @@ const styles = StyleSheet.create({
    
     },
     image: {
-        width: 160,
-        height: 160,
-        borderRadius: 75, 
-        marginBottom: 20
+        width: 150,
+        height: 400,
+        resizeMode: 'cover',
        
      },
     name : {
@@ -54,17 +53,26 @@ const styles = StyleSheet.create({
     },
      description : {
         fontSize: 30,
-        margin: 12
+        margin: 12,
+        marginTop: -80,
     },
+    description2 : {
+      fontSize: 30,
+      margin: 12,
+     
+  },
+   
      
    button: {
         width: 290,
         padding: 5,
-        backgroundColor: '#1e90ff',
+        backgroundColor: 'black',
         borderRadius: 6,
         height: 50,
         bottom: 1,
-        margin: 5
+        margin: 5,
+        justifyContent: "center",
+    marginTop: 18,
    },
     buttonText: {
         color: '#fff',
@@ -75,6 +83,6 @@ const styles = StyleSheet.create({
     text: {
       fontSize: 35,
       margin: 5,
-      marginTop:30
+      marginTop:30,
     }
   });

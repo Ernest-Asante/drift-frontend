@@ -18,7 +18,7 @@ const D_Signup = ({navigation}) => {
 
     // Send POST request to your backend
     try {
-      const response = await fetch('http://10.20.32.44:3001/d_mmotpsend', {
+      const response = await fetch('http://172.20.10.7:3001/d_mmotpsend', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

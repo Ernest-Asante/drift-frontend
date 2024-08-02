@@ -190,7 +190,7 @@ console.log(column)
   
   const acceptRide = async () => {
     try {
-      const response = await fetch('http://10.20.32.44:3001/acceptride', {
+      const response = await fetch('http://172.20.10.7:3001/acceptride', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -233,7 +233,7 @@ console.log(column)
 
   const rejectRide = async () => {
     try {
-      const response = await fetch('http://10.20.32.44:3001/rejectride', {
+      const response = await fetch('http://172.20.10.7:3001/rejectride', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

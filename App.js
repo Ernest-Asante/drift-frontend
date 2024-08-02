@@ -93,38 +93,38 @@ export default function App() {
  
        
      <Stack.Screen name="GetStarted" options={{ headerShown: false }} component={GetStarted}/>
-     <Stack.Screen name="Payment" component={Payment}/>
-     <Stack.Screen name="Profile" component={Profile}/>
-     <Stack.Screen name="Transactions" component={Transactions}/>
-     <Stack.Screen name="ConfirmOtp" component={ConfirmOtp}/>
-     <Stack.Screen name="Signup" component={Signup}/>
-     < Stack.Screen name="Drift" component={Drift}/>
-     <Stack.Screen name="CreateProfile" component={CreateProfile}/>
-     <Stack.Screen name="ConfirmOTP2" component={ConfirmOTP2}/>  
-     <Stack.Screen name="ConfirmOTP3" component={ConfirmOTP3}/>  
-     <Stack.Screen name="ConfirmOTP4" component={ConfirmOTP4}/> 
-     <Stack.Screen name="ConfirmOTP5" component={ConfirmOTP5}/> 
-     <Stack.Screen name="PanicDetail" component={PanicDetail}/>   
-     <Stack.Screen name="PanicDetail2" component={PanicDetail2}/>   
-     <Stack.Screen name="DriverRequest" component={DriverRequest}/>   
-     <Stack.Screen name="RideStatus" options={{ headerShown: false }} component={RideStatus}/>  
-     <Stack.Screen name="SendParcel" component={SendParcel}/>   
-     <Stack.Screen name="OrderRide"   component={OrderRide} /> 
-     <Stack.Screen name="EnterLocation"   component={EnterLocation} />
+     <Stack.Screen name="Payment" component={Payment} options={{ headerShown: false}}/>
+     <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false}}/>
+     <Stack.Screen name="Transactions" component={Transactions} options={{ headerShown: false}}/>
+     <Stack.Screen name="ConfirmOtp" component={ConfirmOtp} options={{ headerShown: false}}/>
+     <Stack.Screen name="Signup" component={Signup} options={{ headerShown: false}}/>
+     < Stack.Screen name="Drift" component={Drift} options={{ headerShown: false}}/>
+     <Stack.Screen name="CreateProfile" component={CreateProfile} options={{ headerShown: false}}/>
+     <Stack.Screen name="ConfirmOTP2" component={ConfirmOTP2} options={{ headerShown: false}}/>  
+     <Stack.Screen name="ConfirmOTP3" component={ConfirmOTP3} options={{ headerShown: false}}/>  
+     <Stack.Screen name="ConfirmOTP4" component={ConfirmOTP4} options={{ headerShown: false}}/> 
+     <Stack.Screen name="ConfirmOTP5" component={ConfirmOTP5} options={{ headerShown: false}}/> 
+     <Stack.Screen name="PanicDetail" component={PanicDetail} options={{ headerShown: false}}/>   
+     <Stack.Screen name="PanicDetail2" component={PanicDetail2} options={{ headerShown: false}}/>   
+     <Stack.Screen name="DriverRequest" component={DriverRequest} options={{ headerShown: false}}/>   
+     <Stack.Screen name="RideStatus" options={{ headerShown: false }} component={RideStatus} />  
+     <Stack.Screen name="SendParcel" component={SendParcel} options={{ headerShown: false}}/>   
+     <Stack.Screen name="OrderRide"   component={OrderRide} options={{ headerShown: false}}/> 
+     <Stack.Screen name="EnterLocation"   component={EnterLocation} options={{ headerShown: false}}/>
      <Stack.Screen name="HomeScreen" options={{ headerShown: false }} component={HomeScreen}/>  
 
   
-    <Stack.Screen name="SignupD" component={D_Signup}/>
-    <Stack.Screen name="ConfirmOTPD" component={D_ConfirmOTP}/>
-    <Stack.Screen name="ConfirmOTP2D" component={D_ConfirmOTP2}/>
-    <Stack.Screen name="ConfirmOTP3D" component={D_ConfirmOTP3}/>
-    <Stack.Screen name="ConfirmOTP4D" component={D_ConfirmOTP4}/>
-    <Stack.Screen name="ConfirmOTP5D" component={D_ConfirmOTP5}/>
+    <Stack.Screen name="SignupD" component={D_Signup} options={{ headerShown: false}}/>
+    <Stack.Screen name="ConfirmOTPD" component={D_ConfirmOTP} options={{ headerShown: false}}/>
+    <Stack.Screen name="ConfirmOTP2D" component={D_ConfirmOTP2} options={{ headerShown: false}}/>
+    <Stack.Screen name="ConfirmOTP3D" component={D_ConfirmOTP3} options={{ headerShown: false}}/>
+    <Stack.Screen name="ConfirmOTP4D" component={D_ConfirmOTP4} options={{ headerShown: false}}/>
+    <Stack.Screen name="ConfirmOTP5D" component={D_ConfirmOTP5} options={{ headerShown: false}}/>
     <Stack.Screen name="HomeScreenD" options={{ headerShown: false }} component={D_HomeScreen}/> 
-    <Stack.Screen name="DriverRequestD" component={D_DriverRequest}/>
-    <Stack.Screen name="DriverProfile" component={D_CreateProfile}/>
-    <Stack.Screen name="CarDetail" component={D_CarDetail}/>
-    <Stack.Screen name="CarDetail2" component={D_CarDetail2}/>
+    <Stack.Screen name="DriverRequestD" component={D_DriverRequest} options={{ headerShown: false}}/>
+    <Stack.Screen name="DriverProfile" component={D_CreateProfile} options={{ headerShown: false}}/>
+    <Stack.Screen name="CarDetail" component={D_CarDetail} options={{ headerShown: false}}/>
+    <Stack.Screen name="CarDetail2" component={D_CarDetail2} options={{ headerShown: false}}/>
      
    </Stack.Navigator>  
 

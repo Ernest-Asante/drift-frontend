@@ -102,7 +102,7 @@ const HomeScreen = ({route,navigation}) => {
   useEffect(() => {
     const fetchUserId = async () => {
       try {
-        const response = await fetch('http://10.20.32.44:3001/getfirstname', {
+        const response = await fetch('http://172.20.10.7:3001/getfirstname', {
           method: 'POST',
           headers: { 
             'Content-Type': 'application/json', 

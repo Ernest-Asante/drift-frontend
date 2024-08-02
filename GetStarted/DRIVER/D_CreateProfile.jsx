@@ -51,7 +51,7 @@ const D_CreateProfile = ({route,navigation}) => {
       setBlock(null)
       console.log('Submitting Profile:', { identity, contact, firstName, lastName });
       try {
-        const response = await fetch('http://10.20.32.44:3001/d_mmotpsend2', {
+        const response = await fetch('http://172.20.10.7:3001/d_mmotpsend2', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json', 
@@ -116,7 +116,7 @@ const D_CreateProfile = ({route,navigation}) => {
       // Send POST request to your backend   
       console.log('Submitting Profile:', { identity, contact, firstName, lastName , dataId});
       try {
-        const response = await fetch('http://10.20.32.44:3001/d_mmotpsend3', {
+        const response = await fetch('http://172.20.10.7:3001/d_mmotpsend3', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json', 
@@ -163,7 +163,7 @@ const D_CreateProfile = ({route,navigation}) => {
       // Send POST request to your backend   
       console.log('Submitting Profile:', { identity, contact, firstName, lastName, dataId });
       try {
-        const response = await fetch('http://10.20.32.44:3001/d_mmotpsend3', {
+        const response = await fetch('http://172.20.10.7:3001/d_mmotpsend3', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json', 
@@ -209,7 +209,7 @@ const D_CreateProfile = ({route,navigation}) => {
       // Send POST request to your backend   
       console.log('Submitting Profile:', { identity, contact, firstName, lastName });
       try {
-        const response = await fetch('http://10.20.32.44:3001/d_mmotpsend3', {
+        const response = await fetch('http://172.20.10.7:3001/d_mmotpsend3', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json', 

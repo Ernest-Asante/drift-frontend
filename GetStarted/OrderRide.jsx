@@ -24,7 +24,7 @@ export default function OrderRide({navigation, route}) {
 
  const origin1 = {latitude: 6.6695, longitude:-1.5607};
 const destination1 = {latitude: 6.5263, longitude: -1.3043};
-const GOOGLE_MAPS_APIKEY = 'AIzaSyCW7L8qQi78TOlySI6lc5ThzDKvqWmY0b8';
+const GOOGLE_MAPS_APIKEY = 'AIzaSyA7CbIXfXkekJjOLTnBCUkqR_MMkVC72QI';
 
  console.log(riderId)
 
@@ -48,7 +48,7 @@ const GOOGLE_MAPS_APIKEY = 'AIzaSyCW7L8qQi78TOlySI6lc5ThzDKvqWmY0b8';
     const fetchDrivers = async () => {
      
       try {
-        const response = await fetch('http://10.20.32.44:3001/my', {
+        const response = await fetch('http://172.20.10.7:3001/my', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -96,7 +96,7 @@ const GOOGLE_MAPS_APIKEY = 'AIzaSyCW7L8qQi78TOlySI6lc5ThzDKvqWmY0b8';
 
     const continueOrder = async () => {
       try {
-        const response = await fetch('http://10.20.32.44:3001/orderride', {
+        const response = await fetch('http://172.20.10.7:3001/orderride', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -226,7 +226,7 @@ useEffect(() => {
             minLength={2}
             onPress={handleOriginPress}
             query={{
-              key: 'AIzaSyCW7L8qQi78TOlySI6lc5ThzDKvqWmY0b8',
+              key: 'AIzaSyA7CbIXfXkekJjOLTnBCUkqR_MMkVC72QI',
               language: 'en',
             }}
             fetchDetails={true}
@@ -270,7 +270,7 @@ useEffect(() => {
             minLength={2}
             onPress={handleDestinationPress}
             query={{
-              key: 'AIzaSyCW7L8qQi78TOlySI6lc5ThzDKvqWmY0b8',
+              key: 'AIzaSyA7CbIXfXkekJjOLTnBCUkqR_MMkVC72QI',
               language: 'en',
             }}
             fetchDetails={true}
@@ -315,7 +315,8 @@ const styles = StyleSheet.create({
   },
   textlabel1: {
     fontSize: 15,
-    margin: "1px"
+    margin: "1px",
+    marginLeft:30
   },
   textlabel2: {
     fontSize: 15,
@@ -335,13 +336,14 @@ const styles = StyleSheet.create({
   button: {
     width: "70%",
     padding: 5,
-    backgroundColor: '#1e90ff',
+    backgroundColor: 'black',
     borderRadius: 6,
     height: 50,
     top: 400,
     marginLeft:"15%",
     margin: 5,
-    zIndex: 10
+    zIndex: 10,
+    justifyContent: "center"
   },
   map: {
     width: '100%',
@@ -350,19 +352,22 @@ const styles = StyleSheet.create({
 button1: {
   width: "70%",
   padding: 5,
-  backgroundColor: '#1e90ff',
+  backgroundColor: 'black',
   borderRadius: 6,
   height: 40,
   top: 5,
   marginLeft:"15%",
   margin: 5,
-  zIndex: 10
+  zIndex: 10,
+  justifyContent: "center"
+ 
 },
 buttonText: {
     color: '#fff',
     fontSize: 20,
     fontWeight: 'bold',
-    textAlign: "center"
+    textAlign: "center",
+    
 },
 
 driverCard: {
